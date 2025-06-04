@@ -26580,88 +26580,522 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
-___CSS_LOADER_EXPORT___.push([module.id, "@import url(https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap);"]);
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, `* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+___CSS_LOADER_EXPORT___.push([module.id, `/* ==========================
+   Variables (colors, spacing)
+   ========================== */
+:root {
+  --color-background: #ffffff;
+  --color-border: #e5e7eb;
+  --color-border-hover: #d1d5db;
+  --color-muted-bg: #f3f4f6;
+  --color-muted-fg: #6b7280;
+  --color-muted-fg-light: #9ca3af;
+  --color-primary: #3b82f6;
+  --color-primary-light: #dbeafe;
+  --color-blue-500: #3b82f6;
+  --color-red-500: #ef4444;
+  --color-text-default: #111827;
+  --color-text-heading: #1f2937;
+  --color-separator: #e5e7eb;
+  --radius-md: 8px;
+  --radius-sm: 4px;
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --font-base: 14px;
+  --font-sm: 12px;
+  --font-md: 16px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
 }
 
-body {
-    width: 300px;
-    background: #f8f9fa;
-    padding: 20px;
-    text-align: center;
-    border-radius: 10px;
+/* ==========================
+   Global Resets (optional)
+   ========================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
 }
 
-.single {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+/* ==========================
+   Main Container (YouTube Automation)
+   ========================== */
+.youtube-automation {
+  width: 320px;          /* ~ w-80 */
+  height: 480px;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text-default);
+  overflow: hidden;
 }
 
-.single_input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 14px;
-    outline: none;
-    transition: 0.3s;
+/* ===== Header ===== */
+.you-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4) var(--spacing-4) var(--spacing-3);
 }
 
-.single_input:focus {
-    border-color: #007bff;
+.you-header-icon {
+  width: 32px;  /* ~ w-8 */
+  height: 32px;
+  background-color: var(--color-red-500);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-button {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: 0.3s;
+.you-header-icon svg {
+  width: 20px;  /* ~ w-5 */
+  height: 20px;
+  color: #ffffff;
 }
 
-.Comment {
-    background: #ff4081;
-    color: white;
+.you-header-title {
+  font-weight: 600;  /* font-semibold */
+  font-size: var(--font-md);
+  color: var(--color-text-heading);
 }
 
-.Like {
-    background: #ffcc00;
-    color: white;
+/* ===== Separator ===== */
+.separator {
+  height: 1px;
+  background-color: var(--color-separator);
+  width: 100%;
 }
 
-.Subscribe {
-    background: #007bff;
-    color: white;
+/* ===== Search Section ===== */
+.search-section {
+  padding: var(--spacing-4) var(--spacing-4) var(--spacing-3);
 }
 
-.Do {
-    background: #28a745;
-    color: white;
+.search-row {
+  display: flex;
+  gap: var(--spacing-2);
 }
 
-button:hover {
-    opacity: 0.8;
+.input-wrapper {
+  position: relative;
+  flex: 1;
 }
 
-.message {
-    margin-top: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    color: red;
-    list-style: none;
-}`, "",{"version":3,"sources":["webpack://./src/pages/Popup/Popup.css"],"names":[],"mappings":"AAEA;IACI,SAAS;IACT,UAAU;IACV,sBAAsB;IACtB,kCAAkC;AACtC;;AAEA;IACI,YAAY;IACZ,mBAAmB;IACnB,aAAa;IACb,kBAAkB;IAClB,mBAAmB;AACvB;;AAEA;IACI,mBAAmB;IACnB,aAAa;IACb,mBAAmB;IACnB,2CAA2C;AAC/C;;AAEA;IACI,WAAW;IACX,aAAa;IACb,mBAAmB;IACnB,sBAAsB;IACtB,kBAAkB;IAClB,eAAe;IACf,aAAa;IACb,gBAAgB;AACpB;;AAEA;IACI,qBAAqB;AACzB;;AAEA;IACI,WAAW;IACX,aAAa;IACb,aAAa;IACb,YAAY;IACZ,kBAAkB;IAClB,eAAe;IACf,gBAAgB;IAChB,eAAe;IACf,gBAAgB;AACpB;;AAEA;IACI,mBAAmB;IACnB,YAAY;AAChB;;AAEA;IACI,mBAAmB;IACnB,YAAY;AAChB;;AAEA;IACI,mBAAmB;IACnB,YAAY;AAChB;;AAEA;IACI,mBAAmB;IACnB,YAAY;AAChB;;AAEA;IACI,YAAY;AAChB;;AAEA;IACI,gBAAgB;IAChB,eAAe;IACf,gBAAgB;IAChB,UAAU;IACV,gBAAgB;AACpB","sourcesContent":["@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');\n\n* {\n    margin: 0;\n    padding: 0;\n    box-sizing: border-box;\n    font-family: 'Poppins', sans-serif;\n}\n\nbody {\n    width: 300px;\n    background: #f8f9fa;\n    padding: 20px;\n    text-align: center;\n    border-radius: 10px;\n}\n\n.single {\n    background: #ffffff;\n    padding: 20px;\n    border-radius: 10px;\n    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);\n}\n\n.single_input {\n    width: 100%;\n    padding: 10px;\n    margin-bottom: 15px;\n    border: 2px solid #ddd;\n    border-radius: 8px;\n    font-size: 14px;\n    outline: none;\n    transition: 0.3s;\n}\n\n.single_input:focus {\n    border-color: #007bff;\n}\n\nbutton {\n    width: 100%;\n    padding: 10px;\n    margin: 5px 0;\n    border: none;\n    border-radius: 8px;\n    font-size: 14px;\n    font-weight: 500;\n    cursor: pointer;\n    transition: 0.3s;\n}\n\n.Comment {\n    background: #ff4081;\n    color: white;\n}\n\n.Like {\n    background: #ffcc00;\n    color: white;\n}\n\n.Subscribe {\n    background: #007bff;\n    color: white;\n}\n\n.Do {\n    background: #28a745;\n    color: white;\n}\n\nbutton:hover {\n    opacity: 0.8;\n}\n\n.message {\n    margin-top: 10px;\n    font-size: 14px;\n    font-weight: 500;\n    color: red;\n    list-style: none;\n}"],"sourceRoot":""}]);
+.input-icon {
+  position: absolute;
+  left: var(--spacing-3);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  color: var(--color-muted-fg-light);
+}
+
+.search-input {
+  width: 100%;
+  padding-left: calc(var(--spacing-3) + 16px + var(--spacing-1)); /* icon + some padding */
+  height: 40px;        /* ~ h-10 */
+  font-size: var(--font-base);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-default);
+}
+
+.search-input:disabled {
+  background-color: var(--color-muted-bg);
+  cursor: not-allowed;
+}
+
+/* ===== Button ===== */
+/* Default (filled) */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;          /* ~ h-10 */
+  padding: 0 var(--spacing-4);
+  font-size: var(--font-base);
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  transition: background 0.2s;
+}
+
+.btn:disabled {
+  background-color: var(--color-border);
+  color: var(--color-muted-fg-light);
+  cursor: not-allowed;
+}
+
+/* Outline variant */
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-default);
+}
+
+.btn-outline:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Icon inside button */
+.btn svg {
+  margin-right: var(--spacing-2);
+  width: 16px;
+  height: 16px;
+}
+
+/* ===== Content Area ===== */
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Idle State ---- */
+.idle-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-6);
+  text-align: center;
+}
+
+.idle-state-icon {
+  width: 64px;  /* ~ w-16 */
+  height: 64px;
+  background-color: var(--color-muted-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-4);
+}
+
+.idle-state-icon svg {
+  width: 32px; /* ~ w-8 */
+  height: 32px;
+  color: var(--color-muted-fg-light);
+}
+
+.idle-state h3 {
+  font-weight: 500; /* font-medium */
+  font-size: var(--font-base);
+  margin-bottom: var(--spacing-2);
+  color: var(--color-text-heading);
+}
+
+.idle-state p {
+  font-size: var(--font-sm);
+  color: var(--color-muted-fg);
+}
+
+/* ---- Loading State ---- */
+.loading-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-6);
+  text-align: center;
+}
+
+.loading-state-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-4);
+}
+
+.loading-state-icon svg {
+  width: 32px;
+  height: 32px;
+  color: var(--color-primary);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-state h3 {
+  font-weight: 500;
+  font-size: var(--font-base);
+  margin-bottom: var(--spacing-1);
+  color: var(--color-text-heading);
+}
+
+.loading-state p {
+  font-size: var(--font-sm);
+  color: var(--color-muted-fg);
+}
+
+/* ---- No Results State ---- */
+.no-results-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-6);
+  text-align: center;
+}
+
+.no-results-icon {
+  width: 64px;
+  height: 64px;
+  background-color: var(--color-muted-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-4);
+}
+
+.no-results-icon svg {
+  width: 32px;
+  height: 32px;
+  color: var(--color-muted-fg-light);
+}
+
+.no-results-state h3 {
+  font-weight: 500;
+  font-size: var(--font-base);
+  margin-bottom: var(--spacing-1);
+  color: var(--color-text-heading);
+}
+
+.no-results-state p {
+  font-size: var(--font-sm);
+  color: var(--color-muted-fg);
+  margin-bottom: var(--spacing-4);
+}
+
+/* ---- Results List (Success) ---- */
+.results-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 var(--spacing-4);
+}
+
+.results-info {
+  padding: var(--spacing-2) 0;
+  font-size: var(--font-sm);
+  color: var(--color-muted-fg);
+}
+
+.channel-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  padding-bottom: var(--spacing-4);
+}
+
+.channel-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.channel-item:hover {
+  background-color: var(--color-muted-bg);
+  border-color: var(--color-border-hover);
+}
+
+.channel-item.selected {
+  background-color: var(--color-primary-light);
+  border-color: rgba(59, 130, 246, 0.3); /* primary/30 */
+}
+
+.channel-avatar-wrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.channel-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.verified-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 20px;   /* ~ w-5 */
+  height: 20px;
+  background-color: var(--color-blue-500);
+  border-radius: 50%;
+  border: 2px solid var(--color-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.verified-badge svg {
+  width: 12px; /* ~ w-3 */
+  height: 12px;
+  color: #ffffff;
+  stroke-width: 3;
+}
+
+/* Channel text */
+.channel-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.channel-name {
+  font-weight: 500;
+  font-size: var(--font-sm);
+  color: var(--color-text-heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.channel-handle {
+  font-size: var(--font-xs);
+  color: var(--color-muted-fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Check icon circle on the right */
+.channel-select-indicator {
+  width: 24px;   /* ~ w-6/h-6 */
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.channel-select-indicator.default {
+  border: 2px solid rgba(107, 114, 128, 0.3); /* muted-foreground/30 */
+}
+
+.channel-select-indicator.hovered:hover {
+  border-color: var(--color-primary);
+}
+
+.channel-select-indicator.selected {
+  background-color: var(--color-primary);
+}
+
+.channel-select-indicator.selected svg {
+  width: 16px; /* ~ w-4 */
+  height: 16px;
+  color: #ffffff;
+  stroke-width: 3;
+}
+
+/* ===== Footer (Start Automation) ===== */
+.footer {
+  padding: var(--spacing-4) var(--spacing-4) var(--spacing-3);
+}
+
+.footer-btn {
+  width: 100%;
+}
+
+/* ==========================
+   ScrollArea (re-usable)
+   ========================== */
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ==========================
+   Separator Component
+   ========================== */
+.separator-full {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-separator);
+}
+
+/* ==========================
+   Input Component
+   ========================== */
+.input-base {
+  width: 100%;
+  padding: 0 var(--spacing-3);
+  height: 40px;
+  font-size: var(--font-base);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-default);
+}
+
+.input-base:disabled {
+  background-color: var(--color-muted-bg);
+  cursor: not-allowed;
+}
+
+/* ==========================
+   Button Component (re-used above)
+   ========================== */
+/* .btn, .btn-outline already defined */
+
+/* ==========================
+   Utility Classes
+   ========================== */
+.text-center {
+  text-align: center;
+}
+.font-medium {
+  font-weight: 500;
+}
+.font-semibold {
+  font-weight: 600;
+}
+.text-sm {
+  font-size: var(--font-base);
+}
+.text-xs {
+  font-size: var(--font-sm);
+}
+.mb-1 {
+  margin-bottom: var(--spacing-1);
+}
+.mb-2 {
+  margin-bottom: var(--spacing-2);
+}
+.mb-4 {
+  margin-bottom: var(--spacing-4);
+}
+.p-6 {
+  padding: var(--spacing-6);
+}
+`, "",{"version":3,"sources":["webpack://./src/pages/Popup/Popup.css"],"names":[],"mappings":"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","sourcesContent":["/* ==========================\r\n   Variables (colors, spacing)\r\n   ========================== */\r\n:root {\r\n  --color-background: #ffffff;\r\n  --color-border: #e5e7eb;\r\n  --color-border-hover: #d1d5db;\r\n  --color-muted-bg: #f3f4f6;\r\n  --color-muted-fg: #6b7280;\r\n  --color-muted-fg-light: #9ca3af;\r\n  --color-primary: #3b82f6;\r\n  --color-primary-light: #dbeafe;\r\n  --color-blue-500: #3b82f6;\r\n  --color-red-500: #ef4444;\r\n  --color-text-default: #111827;\r\n  --color-text-heading: #1f2937;\r\n  --color-separator: #e5e7eb;\r\n  --radius-md: 8px;\r\n  --radius-sm: 4px;\r\n  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);\r\n  --font-base: 14px;\r\n  --font-sm: 12px;\r\n  --font-md: 16px;\r\n  --spacing-1: 4px;\r\n  --spacing-2: 8px;\r\n  --spacing-3: 12px;\r\n  --spacing-4: 16px;\r\n}\r\n\r\n/* ==========================\r\n   Global Resets (optional)\r\n   ========================== */\r\n* {\r\n  box-sizing: border-box;\r\n  margin: 0;\r\n  padding: 0;\r\n  font-family: sans-serif;\r\n}\r\n\r\n/* ==========================\r\n   Main Container (YouTube Automation)\r\n   ========================== */\r\n.youtube-automation {\r\n  width: 320px;          /* ~ w-80 */\r\n  height: 480px;\r\n  background-color: var(--color-background);\r\n  border: 1px solid var(--color-border);\r\n  border-radius: var(--radius-md);\r\n  box-shadow: var(--shadow-md);\r\n  display: flex;\r\n  flex-direction: column;\r\n  color: var(--color-text-default);\r\n  overflow: hidden;\r\n}\r\n\r\n/* ===== Header ===== */\r\n.you-header {\r\n  display: flex;\r\n  align-items: center;\r\n  gap: var(--spacing-2);\r\n  padding: var(--spacing-4) var(--spacing-4) var(--spacing-3);\r\n}\r\n\r\n.you-header-icon {\r\n  width: 32px;  /* ~ w-8 */\r\n  height: 32px;\r\n  background-color: var(--color-red-500);\r\n  border-radius: var(--radius-sm);\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n\r\n.you-header-icon svg {\r\n  width: 20px;  /* ~ w-5 */\r\n  height: 20px;\r\n  color: #ffffff;\r\n}\r\n\r\n.you-header-title {\r\n  font-weight: 600;  /* font-semibold */\r\n  font-size: var(--font-md);\r\n  color: var(--color-text-heading);\r\n}\r\n\r\n/* ===== Separator ===== */\r\n.separator {\r\n  height: 1px;\r\n  background-color: var(--color-separator);\r\n  width: 100%;\r\n}\r\n\r\n/* ===== Search Section ===== */\r\n.search-section {\r\n  padding: var(--spacing-4) var(--spacing-4) var(--spacing-3);\r\n}\r\n\r\n.search-row {\r\n  display: flex;\r\n  gap: var(--spacing-2);\r\n}\r\n\r\n.input-wrapper {\r\n  position: relative;\r\n  flex: 1;\r\n}\r\n\r\n.input-icon {\r\n  position: absolute;\r\n  left: var(--spacing-3);\r\n  top: 50%;\r\n  transform: translateY(-50%);\r\n  width: 16px;\r\n  height: 16px;\r\n  color: var(--color-muted-fg-light);\r\n}\r\n\r\n.search-input {\r\n  width: 100%;\r\n  padding-left: calc(var(--spacing-3) + 16px + var(--spacing-1)); /* icon + some padding */\r\n  height: 40px;        /* ~ h-10 */\r\n  font-size: var(--font-base);\r\n  border: 1px solid var(--color-border);\r\n  border-radius: var(--radius-sm);\r\n  color: var(--color-text-default);\r\n}\r\n\r\n.search-input:disabled {\r\n  background-color: var(--color-muted-bg);\r\n  cursor: not-allowed;\r\n}\r\n\r\n/* ===== Button ===== */\r\n/* Default (filled) */\r\n.btn {\r\n  display: inline-flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  height: 40px;          /* ~ h-10 */\r\n  padding: 0 var(--spacing-4);\r\n  font-size: var(--font-base);\r\n  font-weight: 500;\r\n  border: none;\r\n  border-radius: var(--radius-sm);\r\n  cursor: pointer;\r\n  background-color: var(--color-primary);\r\n  color: #ffffff;\r\n  transition: background 0.2s;\r\n}\r\n\r\n.btn:disabled {\r\n  background-color: var(--color-border);\r\n  color: var(--color-muted-fg-light);\r\n  cursor: not-allowed;\r\n}\r\n\r\n/* Outline variant */\r\n.btn-outline {\r\n  background-color: transparent;\r\n  border: 1px solid var(--color-border);\r\n  color: var(--color-text-default);\r\n}\r\n\r\n.btn-outline:hover:not(:disabled) {\r\n  border-color: var(--color-primary);\r\n  color: var(--color-primary);\r\n}\r\n\r\n/* Icon inside button */\r\n.btn svg {\r\n  margin-right: var(--spacing-2);\r\n  width: 16px;\r\n  height: 16px;\r\n}\r\n\r\n/* ===== Content Area ===== */\r\n.content-area {\r\n  flex: 1;\r\n  display: flex;\r\n  flex-direction: column;\r\n}\r\n\r\n/* ---- Idle State ---- */\r\n.idle-state {\r\n  flex: 1;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  padding: var(--spacing-6);\r\n  text-align: center;\r\n}\r\n\r\n.idle-state-icon {\r\n  width: 64px;  /* ~ w-16 */\r\n  height: 64px;\r\n  background-color: var(--color-muted-bg);\r\n  border-radius: 50%;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  margin: 0 auto var(--spacing-4);\r\n}\r\n\r\n.idle-state-icon svg {\r\n  width: 32px; /* ~ w-8 */\r\n  height: 32px;\r\n  color: var(--color-muted-fg-light);\r\n}\r\n\r\n.idle-state h3 {\r\n  font-weight: 500; /* font-medium */\r\n  font-size: var(--font-base);\r\n  margin-bottom: var(--spacing-2);\r\n  color: var(--color-text-heading);\r\n}\r\n\r\n.idle-state p {\r\n  font-size: var(--font-sm);\r\n  color: var(--color-muted-fg);\r\n}\r\n\r\n/* ---- Loading State ---- */\r\n.loading-state {\r\n  flex: 1;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  padding: var(--spacing-6);\r\n  text-align: center;\r\n}\r\n\r\n.loading-state-icon {\r\n  width: 64px;\r\n  height: 64px;\r\n  border-radius: 50%;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  margin: 0 auto var(--spacing-4);\r\n}\r\n\r\n.loading-state-icon svg {\r\n  width: 32px;\r\n  height: 32px;\r\n  color: var(--color-primary);\r\n  animation: spin 1s linear infinite;\r\n}\r\n\r\n@keyframes spin {\r\n  to {\r\n    transform: rotate(360deg);\r\n  }\r\n}\r\n\r\n.loading-state h3 {\r\n  font-weight: 500;\r\n  font-size: var(--font-base);\r\n  margin-bottom: var(--spacing-1);\r\n  color: var(--color-text-heading);\r\n}\r\n\r\n.loading-state p {\r\n  font-size: var(--font-sm);\r\n  color: var(--color-muted-fg);\r\n}\r\n\r\n/* ---- No Results State ---- */\r\n.no-results-state {\r\n  flex: 1;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  padding: var(--spacing-6);\r\n  text-align: center;\r\n}\r\n\r\n.no-results-icon {\r\n  width: 64px;\r\n  height: 64px;\r\n  background-color: var(--color-muted-bg);\r\n  border-radius: 50%;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  margin: 0 auto var(--spacing-4);\r\n}\r\n\r\n.no-results-icon svg {\r\n  width: 32px;\r\n  height: 32px;\r\n  color: var(--color-muted-fg-light);\r\n}\r\n\r\n.no-results-state h3 {\r\n  font-weight: 500;\r\n  font-size: var(--font-base);\r\n  margin-bottom: var(--spacing-1);\r\n  color: var(--color-text-heading);\r\n}\r\n\r\n.no-results-state p {\r\n  font-size: var(--font-sm);\r\n  color: var(--color-muted-fg);\r\n  margin-bottom: var(--spacing-4);\r\n}\r\n\r\n/* ---- Results List (Success) ---- */\r\n.results-scroll {\r\n  flex: 1;\r\n  overflow-y: auto;\r\n  padding: 0 var(--spacing-4);\r\n}\r\n\r\n.results-info {\r\n  padding: var(--spacing-2) 0;\r\n  font-size: var(--font-sm);\r\n  color: var(--color-muted-fg);\r\n}\r\n\r\n.channel-list {\r\n  display: flex;\r\n  flex-direction: column;\r\n  gap: var(--spacing-3);\r\n  padding-bottom: var(--spacing-4);\r\n}\r\n\r\n.channel-item {\r\n  position: relative;\r\n  display: flex;\r\n  align-items: center;\r\n  gap: var(--spacing-3);\r\n  padding: var(--spacing-3);\r\n  border: 2px solid transparent;\r\n  border-radius: var(--radius-md);\r\n  cursor: pointer;\r\n  transition: background 0.2s, border-color 0.2s;\r\n}\r\n\r\n.channel-item:hover {\r\n  background-color: var(--color-muted-bg);\r\n  border-color: var(--color-border-hover);\r\n}\r\n\r\n.channel-item.selected {\r\n  background-color: var(--color-primary-light);\r\n  border-color: rgba(59, 130, 246, 0.3); /* primary/30 */\r\n}\r\n\r\n.channel-avatar-wrapper {\r\n  position: relative;\r\n  width: 40px;\r\n  height: 40px;\r\n  flex-shrink: 0;\r\n}\r\n\r\n.channel-avatar {\r\n  width: 100%;\r\n  height: 100%;\r\n  border-radius: 50%;\r\n  object-fit: cover;\r\n}\r\n\r\n.verified-badge {\r\n  position: absolute;\r\n  bottom: -2px;\r\n  right: -2px;\r\n  width: 20px;   /* ~ w-5 */\r\n  height: 20px;\r\n  background-color: var(--color-blue-500);\r\n  border-radius: 50%;\r\n  border: 2px solid var(--color-background);\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n\r\n.verified-badge svg {\r\n  width: 12px; /* ~ w-3 */\r\n  height: 12px;\r\n  color: #ffffff;\r\n  stroke-width: 3;\r\n}\r\n\r\n/* Channel text */\r\n.channel-info {\r\n  flex: 1;\r\n  min-width: 0;\r\n}\r\n\r\n.channel-name {\r\n  font-weight: 500;\r\n  font-size: var(--font-sm);\r\n  color: var(--color-text-heading);\r\n  white-space: nowrap;\r\n  overflow: hidden;\r\n  text-overflow: ellipsis;\r\n}\r\n\r\n.channel-handle {\r\n  font-size: var(--font-xs);\r\n  color: var(--color-muted-fg);\r\n  white-space: nowrap;\r\n  overflow: hidden;\r\n  text-overflow: ellipsis;\r\n}\r\n\r\n/* Check icon circle on the right */\r\n.channel-select-indicator {\r\n  width: 24px;   /* ~ w-6/h-6 */\r\n  height: 24px;\r\n  border-radius: 50%;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n}\r\n\r\n.channel-select-indicator.default {\r\n  border: 2px solid rgba(107, 114, 128, 0.3); /* muted-foreground/30 */\r\n}\r\n\r\n.channel-select-indicator.hovered:hover {\r\n  border-color: var(--color-primary);\r\n}\r\n\r\n.channel-select-indicator.selected {\r\n  background-color: var(--color-primary);\r\n}\r\n\r\n.channel-select-indicator.selected svg {\r\n  width: 16px; /* ~ w-4 */\r\n  height: 16px;\r\n  color: #ffffff;\r\n  stroke-width: 3;\r\n}\r\n\r\n/* ===== Footer (Start Automation) ===== */\r\n.footer {\r\n  padding: var(--spacing-4) var(--spacing-4) var(--spacing-3);\r\n}\r\n\r\n.footer-btn {\r\n  width: 100%;\r\n}\r\n\r\n/* ==========================\r\n   ScrollArea (re-usable)\r\n   ========================== */\r\n.scroll-area {\r\n  flex: 1;\r\n  overflow-y: auto;\r\n}\r\n\r\n/* ==========================\r\n   Separator Component\r\n   ========================== */\r\n.separator-full {\r\n  width: 100%;\r\n  height: 1px;\r\n  background-color: var(--color-separator);\r\n}\r\n\r\n/* ==========================\r\n   Input Component\r\n   ========================== */\r\n.input-base {\r\n  width: 100%;\r\n  padding: 0 var(--spacing-3);\r\n  height: 40px;\r\n  font-size: var(--font-base);\r\n  border: 1px solid var(--color-border);\r\n  border-radius: var(--radius-sm);\r\n  color: var(--color-text-default);\r\n}\r\n\r\n.input-base:disabled {\r\n  background-color: var(--color-muted-bg);\r\n  cursor: not-allowed;\r\n}\r\n\r\n/* ==========================\r\n   Button Component (re-used above)\r\n   ========================== */\r\n/* .btn, .btn-outline already defined */\r\n\r\n/* ==========================\r\n   Utility Classes\r\n   ========================== */\r\n.text-center {\r\n  text-align: center;\r\n}\r\n.font-medium {\r\n  font-weight: 500;\r\n}\r\n.font-semibold {\r\n  font-weight: 600;\r\n}\r\n.text-sm {\r\n  font-size: var(--font-base);\r\n}\r\n.text-xs {\r\n  font-size: var(--font-sm);\r\n}\r\n.mb-1 {\r\n  margin-bottom: var(--spacing-1);\r\n}\r\n.mb-2 {\r\n  margin-bottom: var(--spacing-2);\r\n}\r\n.mb-4 {\r\n  margin-bottom: var(--spacing-4);\r\n}\r\n.p-6 {\r\n  padding: var(--spacing-6);\r\n}\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -26688,7 +27122,51 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ``, "",{"version":3,"sources":[],"names":[],"mappings":"","sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `/* Popup Styles */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.popup-container {
+    width: 300px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.popup-header {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.popup-content {
+    font-size: 1em;
+    color: #333;
+}
+
+.popup-footer {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+`, "",{"version":3,"sources":["webpack://./src/pages/Popup/index.css"],"names":[],"mappings":"AAAA,iBAAiB;;AAEjB;IACI,8BAA8B;IAC9B,SAAS;IACT,UAAU;IACV,yBAAyB;AAC7B;;AAEA;IACI,YAAY;IACZ,aAAa;IACb,sBAAsB;IACtB,kBAAkB;IAClB,yCAAyC;AAC7C;;AAEA;IACI,gBAAgB;IAChB,mBAAmB;AACvB;;AAEA;IACI,cAAc;IACd,WAAW;AACf;;AAEA;IACI,gBAAgB;IAChB,iBAAiB;AACrB;;AAEA;IACI,kBAAkB;IAClB,yBAAyB;IACzB,WAAW;IACX,YAAY;IACZ,kBAAkB;IAClB,eAAe;AACnB;;AAEA;IACI,yBAAyB;AAC7B","sourcesContent":["/* Popup Styles */\r\n\r\nbody {\r\n    font-family: Arial, sans-serif;\r\n    margin: 0;\r\n    padding: 0;\r\n    background-color: #f4f4f4;\r\n}\r\n\r\n.popup-container {\r\n    width: 300px;\r\n    padding: 20px;\r\n    background-color: #fff;\r\n    border-radius: 8px;\r\n    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);\r\n}\r\n\r\n.popup-header {\r\n    font-size: 1.5em;\r\n    margin-bottom: 10px;\r\n}\r\n\r\n.popup-content {\r\n    font-size: 1em;\r\n    color: #333;\r\n}\r\n\r\n.popup-footer {\r\n    margin-top: 20px;\r\n    text-align: right;\r\n}\r\n\r\n.button {\r\n    padding: 10px 20px;\r\n    background-color: #007bff;\r\n    color: #fff;\r\n    border: none;\r\n    border-radius: 4px;\r\n    cursor: pointer;\r\n}\r\n\r\n.button:hover {\r\n    background-color: #0056b3;\r\n}\r\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -27369,6 +27847,378 @@ Object.defineProperty(exports, "__esModule", ({value:true}));exports.numericUnic
 "use strict";
 Object.defineProperty(exports, "__esModule", ({value:true}));exports.fromCodePoint=String.fromCodePoint||function(astralCodePoint){return String.fromCharCode(Math.floor((astralCodePoint-65536)/1024)+55296,(astralCodePoint-65536)%1024+56320)};exports.getCodePoint=String.prototype.codePointAt?function(input,position){return input.codePointAt(position)}:function(input,position){return(input.charCodeAt(position)-55296)*1024+input.charCodeAt(position+1)-56320+65536};exports.highSurrogateFrom=55296;exports.highSurrogateTo=56319;
 //# sourceMappingURL=./surrogate-pairs.js.map
+
+/***/ }),
+
+/***/ "./node_modules/lucide-react/dist/esm/Icon.js":
+/*!****************************************************!*\
+  !*** ./node_modules/lucide-react/dist/esm/Icon.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Icon)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _defaultAttributes_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./defaultAttributes.js */ "./node_modules/lucide-react/dist/esm/defaultAttributes.js");
+/* harmony import */ var _shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shared/src/utils.js */ "./node_modules/lucide-react/dist/esm/shared/src/utils.js");
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+
+
+const Icon = (0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(
+  ({
+    color = "currentColor",
+    size = 24,
+    strokeWidth = 2,
+    absoluteStrokeWidth,
+    className = "",
+    children,
+    iconNode,
+    ...rest
+  }, ref) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(
+    "svg",
+    {
+      ref,
+      ..._defaultAttributes_js__WEBPACK_IMPORTED_MODULE_1__["default"],
+      width: size,
+      height: size,
+      stroke: color,
+      strokeWidth: absoluteStrokeWidth ? Number(strokeWidth) * 24 / Number(size) : strokeWidth,
+      className: (0,_shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__.mergeClasses)("lucide", className),
+      ...!children && !(0,_shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__.hasA11yProp)(rest) && { "aria-hidden": "true" },
+      ...rest
+    },
+    [
+      ...iconNode.map(([tag, attrs]) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(tag, attrs)),
+      ...Array.isArray(children) ? children : [children]
+    ]
+  )
+);
+
+
+//# sourceMappingURL=Icon.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/lucide-react/dist/esm/createLucideIcon.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/lucide-react/dist/esm/createLucideIcon.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ createLucideIcon)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./shared/src/utils.js */ "./node_modules/lucide-react/dist/esm/shared/src/utils.js");
+/* harmony import */ var _Icon_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Icon.js */ "./node_modules/lucide-react/dist/esm/Icon.js");
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+
+
+const createLucideIcon = (iconName, iconNode) => {
+  const Component = (0,react__WEBPACK_IMPORTED_MODULE_0__.forwardRef)(
+    ({ className, ...props }, ref) => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Icon_js__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      ref,
+      iconNode,
+      className: (0,_shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__.mergeClasses)(
+        `lucide-${(0,_shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__.toKebabCase)((0,_shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__.toPascalCase)(iconName))}`,
+        `lucide-${iconName}`,
+        className
+      ),
+      ...props
+    })
+  );
+  Component.displayName = (0,_shared_src_utils_js__WEBPACK_IMPORTED_MODULE_2__.toPascalCase)(iconName);
+  return Component;
+};
+
+
+//# sourceMappingURL=createLucideIcon.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/lucide-react/dist/esm/defaultAttributes.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/lucide-react/dist/esm/defaultAttributes.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ defaultAttributes)
+/* harmony export */ });
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+var defaultAttributes = {
+  xmlns: "http://www.w3.org/2000/svg",
+  width: 24,
+  height: 24,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round",
+  strokeLinejoin: "round"
+};
+
+
+//# sourceMappingURL=defaultAttributes.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/lucide-react/dist/esm/icons/check.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/lucide-react/dist/esm/icons/check.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   __iconNode: () => (/* binding */ __iconNode),
+/* harmony export */   "default": () => (/* binding */ Check)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "./node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const __iconNode = [["path", { d: "M20 6 9 17l-5-5", key: "1gmf2c" }]];
+const Check = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("check", __iconNode);
+
+
+//# sourceMappingURL=check.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/lucide-react/dist/esm/icons/loader-circle.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/lucide-react/dist/esm/icons/loader-circle.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   __iconNode: () => (/* binding */ __iconNode),
+/* harmony export */   "default": () => (/* binding */ LoaderCircle)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "./node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const __iconNode = [["path", { d: "M21 12a9 9 0 1 1-6.219-8.56", key: "13zald" }]];
+const LoaderCircle = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("loader-circle", __iconNode);
+
+
+//# sourceMappingURL=loader-circle.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/lucide-react/dist/esm/icons/search.js":
+/*!************************************************************!*\
+  !*** ./node_modules/lucide-react/dist/esm/icons/search.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   __iconNode: () => (/* binding */ __iconNode),
+/* harmony export */   "default": () => (/* binding */ Search)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "./node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const __iconNode = [
+  ["path", { d: "m21 21-4.34-4.34", key: "14j7rj" }],
+  ["circle", { cx: "11", cy: "11", r: "8", key: "4ej97u" }]
+];
+const Search = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("search", __iconNode);
+
+
+//# sourceMappingURL=search.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/lucide-react/dist/esm/icons/sparkles.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/lucide-react/dist/esm/icons/sparkles.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   __iconNode: () => (/* binding */ __iconNode),
+/* harmony export */   "default": () => (/* binding */ Sparkles)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "./node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const __iconNode = [
+  [
+    "path",
+    {
+      d: "M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z",
+      key: "4pj2yx"
+    }
+  ],
+  ["path", { d: "M20 3v4", key: "1olli1" }],
+  ["path", { d: "M22 5h-4", key: "1gvqau" }],
+  ["path", { d: "M4 17v2", key: "vumght" }],
+  ["path", { d: "M5 18H3", key: "zchphs" }]
+];
+const Sparkles = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("sparkles", __iconNode);
+
+
+//# sourceMappingURL=sparkles.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/lucide-react/dist/esm/icons/youtube.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/lucide-react/dist/esm/icons/youtube.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   __iconNode: () => (/* binding */ __iconNode),
+/* harmony export */   "default": () => (/* binding */ Youtube)
+/* harmony export */ });
+/* harmony import */ var _createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../createLucideIcon.js */ "./node_modules/lucide-react/dist/esm/createLucideIcon.js");
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+
+
+const __iconNode = [
+  [
+    "path",
+    {
+      d: "M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17",
+      key: "1q2vi4"
+    }
+  ],
+  ["path", { d: "m10 15 5-3-5-3z", key: "1jp15x" }]
+];
+const Youtube = (0,_createLucideIcon_js__WEBPACK_IMPORTED_MODULE_0__["default"])("youtube", __iconNode);
+
+
+//# sourceMappingURL=youtube.js.map
+
+
+/***/ }),
+
+/***/ "./node_modules/lucide-react/dist/esm/shared/src/utils.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/lucide-react/dist/esm/shared/src/utils.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   hasA11yProp: () => (/* binding */ hasA11yProp),
+/* harmony export */   mergeClasses: () => (/* binding */ mergeClasses),
+/* harmony export */   toCamelCase: () => (/* binding */ toCamelCase),
+/* harmony export */   toKebabCase: () => (/* binding */ toKebabCase),
+/* harmony export */   toPascalCase: () => (/* binding */ toPascalCase)
+/* harmony export */ });
+/**
+ * @license lucide-react v0.511.0 - ISC
+ *
+ * This source code is licensed under the ISC license.
+ * See the LICENSE file in the root directory of this source tree.
+ */
+
+const toKebabCase = (string) => string.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+const toCamelCase = (string) => string.replace(
+  /^([A-Z])|[\s-_]+(\w)/g,
+  (match, p1, p2) => p2 ? p2.toUpperCase() : p1.toLowerCase()
+);
+const toPascalCase = (string) => {
+  const camelCase = toCamelCase(string);
+  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
+};
+const mergeClasses = (...classes) => classes.filter((className, index, array) => {
+  return Boolean(className) && className.trim() !== "" && array.indexOf(className) === index;
+}).join(" ").trim();
+const hasA11yProp = (props) => {
+  for (const prop in props) {
+    if (prop.startsWith("aria-") || prop === "role" || prop === "title") {
+      return true;
+    }
+  }
+};
+
+
+//# sourceMappingURL=utils.js.map
+
 
 /***/ }),
 
@@ -31391,6 +32241,53 @@ module.exports = styleTagTransform;
 
 /***/ }),
 
+/***/ "./src/pages/Popup/Button.tsx":
+/*!************************************!*\
+  !*** ./src/pages/Popup/Button.tsx ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Button: () => (/* binding */ Button)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _Popup_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Popup.css */ "./src/pages/Popup/Popup.css");
+"use client";
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __rest = (undefined && undefined.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+
+
+function Button(_a) {
+    var _b = _a.variant, variant = _b === void 0 ? "default" : _b, children = _a.children, _c = _a.className, className = _c === void 0 ? "" : _c, rest = __rest(_a, ["variant", "children", "className"]);
+    var baseClass = variant === "outline" ? "btn btn-outline" : "btn";
+    return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", __assign({ className: "".concat(baseClass, " ").concat(className) }, rest), children));
+}
+
+
+/***/ }),
+
 /***/ "./src/pages/Popup/Popup.tsx":
 /*!***********************************!*\
   !*** ./src/pages/Popup/Popup.tsx ***!
@@ -31400,44 +32297,308 @@ module.exports = styleTagTransform;
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */   "default": () => (/* binding */ Component)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/search.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/loader-circle.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/youtube.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/check.js");
+/* harmony import */ var lucide_react__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! lucide-react */ "./node_modules/lucide-react/dist/esm/icons/sparkles.js");
+/* harmony import */ var _Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Button */ "./src/pages/Popup/Button.tsx");
+/* harmony import */ var _input__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./input */ "./src/pages/Popup/input.tsx");
+/* harmony import */ var _ScrollArea__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ScrollArea */ "./src/pages/Popup/ScrollArea.tsx");
+/* harmony import */ var _Separator__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Separator */ "./src/pages/Popup/Separator.tsx");
+/* harmony import */ var _Popup_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Popup.css */ "./src/pages/Popup/Popup.css");
+"use client";
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (undefined && undefined.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+
+
+
+
+
+
+
+// Mock channel data for API simulation
+var mockChannelDatabase = [
+    {
+        id: "1",
+        name: "MrBeast",
+        ubscribers: "224M subscribers",
+        avatar: "/placeholder.svg?height=48&width=48",
+        verified: true,
+    },
+    {
+        id: "2",
+        name: "PewDiePie",
+        subscribers: "111M subscribers",
+        avatar: "/placeholder.svg?height=48&width=48",
+        verified: true,
+    },
+    {
+        id: "3",
+        name: "Marques Brownlee",
+        scribers: "18.1M subscribers",
+        avatar: "/placeholder.svg?height=48&width=48",
+        verified: true,
+    },
+    {
+        id: "4",
+        name: "Veritasium",
+        subscribers: "14.1M subscribers",
+        avatar: "/placeholder.svg?height=48&width=48",
+        verified: true,
+    },
+    {
+        id: "5",
+        name: "Linus Tech Tips",
+        subscribers: "15.8M subscribers",
+        avatar: "/placeholder.svg?height=48&width=48",
+        verified: true,
+    },
+];
+function Component() {
+    var _this = this;
+    var _a = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(""), searchQuery = _a[0], setSearchQuery = _a[1];
+    var _b = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(null), selectedChannel = _b[0], setSelectedChannel = _b[1];
+    var _c = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)("idle"), searchState = _c[0], setSearchState = _c[1];
+    var _d = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]), searchResults = _d[0], setSearchResults = _d[1];
+    var handleSearch = function () { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            if (!searchQuery.trim())
+                return [2 /*return*/];
+            setSearchState("loading");
+            setSelectedChannel(null);
+            // Simulate API call
+            setTimeout(function () {
+                var results = mockChannelDatabase.filter(function (channel) {
+                    return channel.name.toLowerCase().includes(searchQuery.toLowerCase());
+                });
+                if (results.length > 0) {
+                    setSearchResults(results);
+                    setSearchState("success");
+                }
+                else {
+                    setSearchResults([]);
+                    setSearchState("no-results");
+                }
+            }, 1200); // Simulate network delay
+            return [2 /*return*/];
+        });
+    }); };
+    var handleKeyPress = function (e) {
+        if (e.key === "Enter") {
+            handleSearch();
+        }
+    };
+    var selectedChannelData = selectedChannel
+        ? searchResults.find(function (channel) { return channel.id === selectedChannel; })
+        : null;
+    var renderContent = function () {
+        switch (searchState) {
+            case "idle":
+                return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "idle-state" },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "idle-state-icon" },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], null)),
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("h3", null, "Search for a channel"),
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null, "Enter a channel name or handle to find YouTube channels for automation."))));
+            case "loading":
+                return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "loading-state" },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "loading-state-icon" },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(lucide_react__WEBPACK_IMPORTED_MODULE_7__["default"], null)),
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("h3", null, "Searching..."),
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null,
+                            "Looking for \"",
+                            searchQuery,
+                            "\""))));
+            case "no-results":
+                return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "no-results-state" },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "no-results-icon" },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement(lucide_react__WEBPACK_IMPORTED_MODULE_8__["default"], null)),
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("h3", null, "No channels found"),
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement("p", null,
+                            "We couldn\u2019t find any channels matching \"",
+                            searchQuery,
+                            "\""),
+                        react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Button__WEBPACK_IMPORTED_MODULE_1__.Button, { variant: "outline", onClick: function () { return setSearchState("idle"); } }, "Try another search"))));
+            case "success":
+                return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(_ScrollArea__WEBPACK_IMPORTED_MODULE_3__.ScrollArea, { className: "results-scroll" },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "results-info" },
+                        "Found ",
+                        searchResults.length,
+                        " result",
+                        searchResults.length !== 1 ? "s" : "",
+                        " for \"",
+                        searchQuery,
+                        "\""),
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "channel-list" }, searchResults.map(function (channel) {
+                        var isSelected = selectedChannel === channel.id;
+                        return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { key: channel.id, className: "channel-item ".concat(isSelected ? "selected" : ""), onClick: function () { return setSelectedChannel(channel.id); } },
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "channel-avatar-wrapper" },
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("img", { src: channel.avatar || "/placeholder.svg", alt: channel.name, width: 40, height: 40, className: "channel-avatar" }),
+                                channel.verified && (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "verified-badge" },
+                                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(lucide_react__WEBPACK_IMPORTED_MODULE_9__["default"], null)))),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "channel-info" },
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "channel-name" }, channel.name),
+                                react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "channel-handle" },
+                                    "\u2022 ",
+                                    channel.subscribers)),
+                            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "channel-select-indicator ".concat(isSelected ? "selected" : "default hovered") }, isSelected && react__WEBPACK_IMPORTED_MODULE_0__.createElement(lucide_react__WEBPACK_IMPORTED_MODULE_9__["default"], null))));
+                    }))));
+            default:
+                return null;
+        }
+    };
+    return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "youtube-automation" },
+        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "you-header" },
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "you-header-icon" },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(lucide_react__WEBPACK_IMPORTED_MODULE_8__["default"], null)),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("h1", { className: "you-header-title" }, "YouTube Automation")),
+        react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Separator__WEBPACK_IMPORTED_MODULE_4__.Separator, null),
+        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "search-section" },
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "search-row" },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(_input__WEBPACK_IMPORTED_MODULE_2__.Input, { icon: react__WEBPACK_IMPORTED_MODULE_0__.createElement(lucide_react__WEBPACK_IMPORTED_MODULE_6__["default"], null), placeholder: "Search channels...", value: searchQuery, onChange: function (e) { return setSearchQuery(e.target.value); }, onKeyDown: handleKeyPress, disabled: searchState === "loading" }),
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Button__WEBPACK_IMPORTED_MODULE_1__.Button, { onClick: handleSearch, disabled: !searchQuery.trim() || searchState === "loading" }, searchState === "loading" ? (react__WEBPACK_IMPORTED_MODULE_0__.createElement(lucide_react__WEBPACK_IMPORTED_MODULE_7__["default"], { className: "animate-spin" })) : ("Search")))),
+        react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Separator__WEBPACK_IMPORTED_MODULE_4__.Separator, null),
+        react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "content-area" }, renderContent()),
+        selectedChannelData && (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null,
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Separator__WEBPACK_IMPORTED_MODULE_4__.Separator, null),
+            react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "footer" },
+                react__WEBPACK_IMPORTED_MODULE_0__.createElement(_Button__WEBPACK_IMPORTED_MODULE_1__.Button, { className: "footer-btn" },
+                    react__WEBPACK_IMPORTED_MODULE_0__.createElement(lucide_react__WEBPACK_IMPORTED_MODULE_10__["default"], null),
+                    "Start Automation"))))));
+}
+
+
+/***/ }),
+
+/***/ "./src/pages/Popup/ScrollArea.tsx":
+/*!****************************************!*\
+  !*** ./src/pages/Popup/ScrollArea.tsx ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   ScrollArea: () => (/* binding */ ScrollArea)
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var _Popup_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Popup.css */ "./src/pages/Popup/Popup.css");
+"use client";
 
 
-var Popup = function () {
-    var inputRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-    var messageRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
-    var StartAutomation = function (event) {
-        var _a;
-        var buttonText = event.currentTarget.innerText;
-        var commentValue = ((_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.value.trim()) || "";
-        if ((buttonText === "Comment" || buttonText === "Do All") && !commentValue) {
-            if (messageRef.current)
-                messageRef.current.innerText = "Please enter a comment";
-            return;
+function ScrollArea(_a) {
+    var children = _a.children, _b = _a.className, className = _b === void 0 ? "" : _b;
+    return react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "scroll-area ".concat(className) }, children);
+}
+
+
+/***/ }),
+
+/***/ "./src/pages/Popup/Separator.tsx":
+/*!***************************************!*\
+  !*** ./src/pages/Popup/Separator.tsx ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Separator: () => (/* binding */ Separator)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+"use client";
+
+function Separator() {
+    return react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "separator-full" });
+}
+
+
+/***/ }),
+
+/***/ "./src/pages/Popup/input.tsx":
+/*!***********************************!*\
+  !*** ./src/pages/Popup/input.tsx ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Input: () => (/* binding */ Input)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _Popup_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Popup.css */ "./src/pages/Popup/Popup.css");
+"use client";
+var __assign = (undefined && undefined.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
         }
-        chrome.runtime.sendMessage({ action: buttonText, UserValue: commentValue }, function () {
-            if (chrome.runtime.lastError) {
-                console.error("Error sending message:", chrome.runtime.lastError.message);
-            }
-            else {
-                console.log("Message sent:", buttonText, commentValue);
-            }
-            if (inputRef.current)
-                inputRef.current.value = "";
-        });
+        return t;
     };
-    return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "single" },
-        react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", { ref: inputRef, className: "single_input", type: "text", placeholder: "Enter a Comment" }),
-        react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { className: "Comment", onClick: StartAutomation }, "Comment"),
-        react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { className: "Like", onClick: StartAutomation }, "Like"),
-        react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { className: "Subscribe", onClick: StartAutomation }, "Subscribe"),
-        react__WEBPACK_IMPORTED_MODULE_0__.createElement("button", { className: "Do All", onClick: StartAutomation }, "Do All"),
-        react__WEBPACK_IMPORTED_MODULE_0__.createElement("li", { ref: messageRef, className: "message" })));
+    return __assign.apply(this, arguments);
 };
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Popup);
+var __rest = (undefined && undefined.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+
+
+function Input(_a) {
+    var icon = _a.icon, _b = _a.className, className = _b === void 0 ? "" : _b, rest = __rest(_a, ["icon", "className"]);
+    return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "input-wrapper" },
+        icon && react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", { className: "input-icon" }, icon),
+        react__WEBPACK_IMPORTED_MODULE_0__.createElement("input", __assign({ className: "search-input ".concat(className) }, rest))));
+}
 
 
 /***/ }),
@@ -34058,7 +35219,7 @@ module.exports.formatError = function (err) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("bac5ae0f22f8faea77c1")
+/******/ 		__webpack_require__.h = () => ("99879133a2add3e56fc3")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */

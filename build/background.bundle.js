@@ -9,37 +9,6 @@
 /***/ (() => {
 
 
-console.log('Background Working');
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    if (["Comment", "Like", "Subscribe", "Do All"].includes(message.action)) {
-        chrome.tabs.create({ url: "https://www.youtube.com", active: true }, function (tab) {
-            if (!tab.id) {
-                sendResponse({ status: "Error", error: "Failed to create tab" });
-                return;
-            }
-            delay(3000).then(function () {
-                chrome.tabs.sendMessage(tab.id, { action: message.action, UserValue: message.UserValue }, function (response) {
-                    if (chrome.runtime.lastError) {
-                        sendResponse({ status: "Error", error: chrome.runtime.lastError.message });
-                        return;
-                    }
-                    if (response && response.status === "Automation Completed!") {
-                        chrome.tabs.remove(tab.id, function () {
-                            sendResponse({ status: "Automation Completed!" });
-                        });
-                    }
-                    else {
-                        sendResponse({ status: "Error", error: (response === null || response === void 0 ? void 0 : response.error) || "Unknown error" });
-                    }
-                });
-            });
-        });
-        return true; // Keeps sendResponse valid for asynchronous use
-    }
-});
-//   function delay(ms: number): Promise<void> {
-//     return new Promise((resolve) => setTimeout(resolve, ms));
-//   }
 
 
 /***/ })
@@ -105,7 +74,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 /******/ 	
 /******/ 	/* webpack/runtime/getFullHash */
 /******/ 	(() => {
-/******/ 		__webpack_require__.h = () => ("bac5ae0f22f8faea77c1")
+/******/ 		__webpack_require__.h = () => ("99879133a2add3e56fc3")
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
