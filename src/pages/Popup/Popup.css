@@ -93,6 +93,7 @@
 /* ===== Search Section ===== */
 .search-section {
   padding: var(--spacing-4) var(--spacing-4) var(--spacing-3);
+  
 }
 
 .search-row {
@@ -107,9 +108,9 @@
 
 .input-icon {
   position: absolute;
-  left: var(--spacing-3);
-  top: 50%;
-  transform: translateY(-50%);
+  left: var(--spacing-2);
+  top: 40%;
+  transform: translateY(-40%);
   width: 16px;
   height: 16px;
   color: var(--color-muted-fg-light);
@@ -175,9 +176,10 @@
 
 /* ===== Content Area ===== */
 .content-area {
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  min-height: 0;
 }
 
 /* ---- Idle State ---- */
@@ -446,8 +448,9 @@
    ScrollArea (re-usable)
    ========================== */
 .scroll-area {
-  flex: 1;
+  max-height: 100%; /* or any value that fits your popup design */
   overflow-y: auto;
+  flex: unset;
 }
 
 /* ==========================

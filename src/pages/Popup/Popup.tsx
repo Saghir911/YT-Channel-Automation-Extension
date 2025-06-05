@@ -15,7 +15,7 @@ const mockChannelDatabase = [
   {
     id: "1",
     name: "MrBeast",
-    ubscribers: "224M subscribers",
+    subscribers: "224M subscribers",
     avatar: "/placeholder.svg?height=48&width=48",
     verified: true,
   },
@@ -29,7 +29,7 @@ const mockChannelDatabase = [
   {
     id: "3",
     name: "Marques Brownlee",
-    scribers: "18.1M subscribers",
+    subscribers: "18.1M subscribers",
     avatar: "/placeholder.svg?height=48&width=48",
     verified: true,
   },
@@ -59,26 +59,54 @@ export default function Component() {
     typeof mockChannelDatabase
   >([]);
 
+  // Format subscriber count like YouTube (e.g., 5.8M, 123K, 999)
+  function formatSubscribers(subs: string | number): string {
+    const num = typeof subs === "number" ? subs : Number(subs);
+    if (isNaN(num)) return String(subs);
+    if (num >= 1_000_000)
+      return (num / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
+    if (num >= 1_000) return (num / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
+    return num.toString();
+  }
+
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
-
     setSearchState("loading");
     setSelectedChannel(null);
 
-    // Simulate API call
-    setTimeout(() => {
-      const results = mockChannelDatabase.filter((channel) =>
-        channel.name.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-
-      if (results.length > 0) {
-        setSearchResults(results);
-        setSearchState("success");
-      } else {
-        setSearchResults([]);
-        setSearchState("no-results");
+    // Request real data from background script
+    chrome.runtime.sendMessage(
+      { type: "FETCH_CHANNELS", query: searchQuery, maxResults: 5 },
+      (response) => {
+        console.log("[POPUP] Got response from background:", response);
+        if (chrome.runtime.lastError || !response) {
+          console.error(
+            "[POPUP] Error or no response:",
+            chrome.runtime.lastError,
+            response
+          );
+          setSearchResults([]);
+          setSearchState("error");
+          return;
+        }
+        if (response.channels && response.channels.length > 0) {
+          // Map API response to UI structure
+          const mappedResults = response.channels.map((ch: any) => ({
+            id: ch.id,
+            name: ch.title, // API 'title' -> UI 'name'
+            subscribers: formatSubscribers(ch.subscriberCount) + " subscribers", // Format for UI
+            avatar: ch.iconUrl, // API 'iconUrl' -> UI 'avatar'
+            verified: false, // API does not provide, default to false
+          }));
+          console.log("[POPUP] Mapped results:", mappedResults);
+          setSearchResults(mappedResults);
+          setSearchState("success");
+        } else {
+          setSearchResults([]);
+          setSearchState("no-results");
+        }
       }
-    }, 1200); // Simulate network delay
+    );
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -155,7 +183,9 @@ export default function Component() {
                   <div
                     key={channel.id}
                     className={`channel-item ${isSelected ? "selected" : ""}`}
-                    onClick={() => setSelectedChannel(channel.id)}
+                    onClick={() =>
+                      setSelectedChannel(isSelected ? null : channel.id)
+                    }
                   >
                     <div className="channel-avatar-wrapper">
                       <img
@@ -175,7 +205,7 @@ export default function Component() {
                     <div className="channel-info">
                       <div className="channel-name">{channel.name}</div>
                       <div className="channel-handle">
-                         &bull; {channel.subscribers}
+                        {channel.subscribers}
                       </div>
                     </div>
 
@@ -184,7 +214,11 @@ export default function Component() {
                         isSelected ? "selected" : "default hovered"
                       }`}
                     >
-                      {isSelected && <Check />}
+                      {isSelected ? (
+                        <Check />
+                      ) : (
+                        <div className="check-placeholder" />
+                      )}
                     </div>
                   </div>
                 );
