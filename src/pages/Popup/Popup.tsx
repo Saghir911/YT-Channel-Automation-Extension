@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Search, Youtube, Check, Loader2, Sparkles } from "lucide-react";
+import gsap from "gsap";
 
 import { Button } from "./Button";
 import { Input } from "./input";
@@ -16,6 +17,7 @@ export default function Component() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedChannel, setSelectedChannel] = useState<string | null>(null);
   const [searchState, setSearchState] = useState<SearchState>("idle");
+  const [whenSelected, setwhenSelected] = useState(false);
   const [searchResults, setSearchResults] = useState<
     Array<{
       id: string;
@@ -26,6 +28,35 @@ export default function Component() {
       handle?: string;
     }>
   >([]);
+  const [videoCount, setVideoCount] = useState(1);
+  const minVideos = 1;
+  const maxVideos = 10;
+
+  const channelListRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (whenSelected && channelListRef.current) {
+      // Animate fade out for unselected
+      gsap.to(
+        channelListRef.current.querySelectorAll(".channel-item:not(.selected)"),
+        { opacity: 0, scale: 0.95, duration: 0.3, pointerEvents: "none" }
+      );
+    } else if (!whenSelected && channelListRef.current) {
+      // Instantly show all
+      gsap.set(channelListRef.current.querySelectorAll(".channel-item"), {
+        opacity: 1,
+        scale: 1,
+        clearProps: "pointerEvents",
+      });
+    }
+  }, [whenSelected, selectedChannel]);
+
+  useEffect(() => {
+    if (selectedChannel === null) {
+      // No channel is selected → reset whenSelected
+      setwhenSelected(false);
+    }
+  }, [selectedChannel]);
 
   const selectedChannelHandle = searchResults.find(
     (channel) => channel.id === selectedChannel
@@ -155,47 +186,92 @@ export default function Component() {
               {searchResults.length !== 1 ? "s" : ""} for &quot;{searchQuery}
               &quot;
             </div>
-            <div className="channel-list">
+            <div className="channel-list" ref={channelListRef}>
               {searchResults.map((channel) => {
                 const isSelected = selectedChannel === channel.id;
-                return (
-                  <div
-                    key={channel.id}
-                    className={`channel-item ${isSelected ? "selected" : ""}`}
-                    onClick={() =>
-                      setSelectedChannel(isSelected ? null : channel.id)
-                    }
-                  >
-                    <div className="channel-avatar-wrapper">
-                      <img
-                        src={channel.avatar || "/placeholder.svg"}
-                        alt={channel.name}
-                        width={40}
-                        height={40}
-                        className="channel-avatar"
-                      />
-                    </div>
 
-                    <div className="channel-info">
-                      <div className="channel-name">{channel.name}</div>
-                      <div className="channel-handle">
-                        <span className="handle">@{channel.handle}</span>{" "}
+                return (
+                  <React.Fragment key={channel.id}>
+                    {whenSelected && isSelected && (
+                      <div className="video-count-input-wrapper center">
+                        <label
+                          htmlFor="noOfVideoToAutomate"
+                          className="video-count-label"
+                        >
+                          Enter number of videos to automate:
+                        </label>
+                        <div className="video-count-controls">
+                          <button
+                            type="button"
+                            className="video-count-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setVideoCount((prev) =>
+                                Math.max(minVideos, prev - 1)
+                              );
+                            }}
+                            disabled={videoCount <= minVideos}
+                          >
+                            -
+                          </button>
+                          <div
+                            className="video-count-display"
+                            id="noOfVideoToAutomate"
+                          >
+                            {videoCount}
+                          </div>
+                          <button
+                            type="button"
+                            className="video-count-btn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setVideoCount((prev) =>
+                                Math.min(maxVideos, prev + 1)
+                              );
+                            }}
+                            disabled={videoCount >= maxVideos}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    <div
+                      onClick={() => {
+                        setSelectedChannel(isSelected ? null : channel.id);
+                        setwhenSelected(true);
+                        if (isSelected) setwhenSelected(false);
+                      }}
+                      className={`channel-item${isSelected ? " selected" : ""}`}
+                    >
+                      <div className="channel-avatar-wrapper">
+                        <img
+                          src={channel.avatar || "/placeholder.svg"}
+                          alt={channel.name}
+                          width={40}
+                          height={40}
+                          className="channel-avatar"
+                        />
+                      </div>
+
+                      <div className="channel-info">
+                        <div className="channel-name">{channel.name}</div>
                         {channel.subscribers}
                       </div>
-                    </div>
 
-                    <div
-                      className={`channel-select-indicator ${
-                        isSelected ? "selected" : "default hovered"
-                      }`}
-                    >
-                      {isSelected ? (
-                        <Check />
-                      ) : (
-                        <div className="check-placeholder" />
-                      )}
+                      <div
+                        className={`channel-select-indicator ${
+                          isSelected ? "selected" : "default hovered"
+                        }`}
+                      >
+                        {isSelected ? (
+                          <Check />
+                        ) : (
+                          <div className="check-placeholder" />
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  </React.Fragment>
                 );
               })}
             </div>

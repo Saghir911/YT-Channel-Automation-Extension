@@ -145,7 +145,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // Indicate that we will respond asynchronously
     return true;
   } else if (message.action === "START_AUTOMATION") {
-    const videoPageUrl = `https://www.youtube.com/${message.selectedHandle?.handle}/videos`;
+    const videoPageUrl = `https://www.youtube.com/@${message.selectedHandle?.handle}/videos`;
     chrome.tabs.create({ url: videoPageUrl }, (tab) => {
     videoPageId = tab.id ?? null;
     console.log(tab.id, "tab id");

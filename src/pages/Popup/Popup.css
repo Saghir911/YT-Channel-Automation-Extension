@@ -35,13 +35,15 @@
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
 }
 
 /* ==========================
    Main Container (YouTube Automation)
    ========================== */
 .youtube-automation {
-  width: 320px;          /* ~ w-80 */
+  width: 320px; /* ~ w-80 */
   height: 480px;
   background-color: var(--color-background);
   border: 1px solid var(--color-border);
@@ -62,7 +64,7 @@
 }
 
 .you-header-icon {
-  width: 32px;  /* ~ w-8 */
+  width: 32px; /* ~ w-8 */
   height: 32px;
   background-color: var(--color-red-500);
   border-radius: var(--radius-sm);
@@ -72,13 +74,13 @@
 }
 
 .you-header-icon svg {
-  width: 20px;  /* ~ w-5 */
+  width: 20px; /* ~ w-5 */
   height: 20px;
   color: #ffffff;
 }
 
 .you-header-title {
-  font-weight: 600;  /* font-semibold */
+  font-weight: 600; /* font-semibold */
   font-size: var(--font-md);
   color: var(--color-text-heading);
 }
@@ -93,7 +95,6 @@
 /* ===== Search Section ===== */
 .search-section {
   padding: var(--spacing-4) var(--spacing-4) var(--spacing-3);
-  
 }
 
 .search-row {
@@ -108,9 +109,11 @@
 
 .input-icon {
   position: absolute;
-  left: var(--spacing-2);
+  left: var(--spacing-1);
+  margin-left: 3px;
   top: 40%;
   transform: translateY(-40%);
+
   width: 16px;
   height: 16px;
   color: var(--color-muted-fg-light);
@@ -118,8 +121,10 @@
 
 .search-input {
   width: 100%;
-  padding-left: calc(var(--spacing-3) + 16px + var(--spacing-1)); /* icon + some padding */
-  height: 40px;        /* ~ h-10 */
+  padding-left: calc(
+    var(--spacing-3) + 16px + var(--spacing-1)
+  ); /* icon + some padding */
+  height: 40px; /* ~ h-10 */
   font-size: var(--font-base);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
@@ -137,7 +142,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 40px;          /* ~ h-10 */
+  height: 40px; /* ~ h-10 */
   padding: 0 var(--spacing-4);
   font-size: var(--font-base);
   font-weight: 500;
@@ -193,7 +198,7 @@
 }
 
 .idle-state-icon {
-  width: 64px;  /* ~ w-16 */
+  width: 64px; /* ~ w-16 */
   height: 64px;
   background-color: var(--color-muted-bg);
   border-radius: 50%;
@@ -219,6 +224,8 @@
 .idle-state p {
   font-size: var(--font-sm);
   color: var(--color-muted-fg);
+  width: 90%;
+  margin: 0 auto;
 }
 
 /* ---- Loading State ---- */
@@ -322,6 +329,7 @@
 .channel-list {
   display: flex;
   flex-direction: column;
+  position: relative;
   gap: var(--spacing-3);
   padding-bottom: var(--spacing-4);
 }
@@ -345,7 +353,20 @@
 
 .channel-item.selected {
   background-color: var(--color-primary-light);
-  border-color: rgba(59, 130, 246, 0.3); /* primary/30 */
+  border-color: rgba(59, 130, 246, 0.3);
+  top: 5%;
+  position: absolute;
+  width: 100%;
+}
+
+.channel-item.fade-out {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+  display: none;
+  z-index: -100;
+  position: absolute;
+  cursor: not-allowed;
 }
 
 .channel-avatar-wrapper {
@@ -361,28 +382,6 @@
   border-radius: 50%;
   object-fit: cover;
 }
-
-.verified-badge {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
-  width: 20px;   /* ~ w-5 */
-  height: 20px;
-  background-color: var(--color-blue-500);
-  border-radius: 50%;
-  border: 2px solid var(--color-background);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.verified-badge svg {
-  width: 12px; /* ~ w-3 */
-  height: 12px;
-  color: #ffffff;
-  stroke-width: 3;
-}
-
 /* Channel text */
 .channel-info {
   flex: 1;
@@ -398,17 +397,9 @@
   text-overflow: ellipsis;
 }
 
-.channel-handle {
-  font-size: var(--font-xs);
-  color: var(--color-muted-fg);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 /* Check icon circle on the right */
 .channel-select-indicator {
-  width: 24px;   /* ~ w-6/h-6 */
+  width: 24px; /* ~ w-6/h-6 */
   height: 24px;
   border-radius: 50%;
   display: flex;
@@ -514,4 +505,116 @@
 }
 .p-6 {
   padding: var(--spacing-6);
+}
+
+/* ==========================
+   Video Count Input Component
+   ========================== */
+/* Container for the video count input */
+.video-count-input-wrapper {
+  position: absolute;
+  display: flex;
+  top: 25%;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0px 8px 0px; /* extra top margin to sit below the selected channel */
+  background: #f0f9ff; /* a light blue background to stand out */
+  border-radius: 8px; /* slightly larger rounding */
+  padding: 8px 16px; /* more padding for comfort */
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15); /* slightly stronger shadow */
+  border: 1px solid #3b82f6; /* a blue border to match primary color */
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Hover/Focus state for the wrapper (optional subtle lift) */
+.video-count-input-wrapper:hover,
+.video-count-input-wrapper:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.video-count-input-wrapper.center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin-bottom: 12px;
+  margin-top: 8px;
+  background: var(--color-muted-bg);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.07);
+}
+
+/* Label styling */
+.video-count-label {
+  font-size: var(--font-sm);
+  color: var(--color-text-heading);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+/* Input field styling */
+.video-count-input {
+  width: 80px; /* a bit wider for clarity */
+  height: 36px; /* slightly taller */
+  font-size: 1rem; /* 16px for readability */
+  border: 1px solid #3b82f6; /* blue border to match wrapper */
+  border-radius: 6px; /* small rounding */
+  padding: 0 10px; /* horizontal padding */
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Input focus state */
+.video-count-input:focus {
+  border-color: #2563eb; /* darker blue on focus */
+  box-shadow: 0 0 4px rgba(37, 99, 235, 0.3);
+}
+
+/* Placeholder color */
+.video-count-input::placeholder {
+  color: #9ca3af; /* muted placeholder color */
+}
+
+.video-count-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.video-count-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s, color 0.2s;
+}
+
+.video-count-btn:disabled {
+  background: var(--color-border);
+  color: var(--color-muted-fg-light);
+  cursor: not-allowed;
+}
+
+.video-count-display {
+  min-width: 36px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-text-heading);
+  background: #fff;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  padding: 6px 14px;
 }
