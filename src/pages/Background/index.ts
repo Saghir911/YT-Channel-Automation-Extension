@@ -1,10 +1,11 @@
-import { CookingPot } from "lucide-react";
+import { Chrome, CookingPot, Send } from "lucide-react";
 
 type ChannelInfo = {
   id: string;
   title: string;
   iconUrl: string;
   subscriberCount: string;
+  handle: string; // Add handle as optional
 };
 
 type SearchItem = {
@@ -18,18 +19,27 @@ type ChannelsItem = {
   id: string;
   snippet: {
     title: string;
+    customUrl?: string; // This is the new field for channel handle
     thumbnails: {
       default: {
         url: string;
       };
     };
+    handle: string;
   };
   statistics: {
     subscriberCount: string;
   };
+  brandingSettings?: {
+    channel?: {
+      customUrl?: string;
+    };
+  };
 };
 
-const API_KEY = "AIzaSyDhpNTbHbITjJad64MFgO4eRVkm-x6VQYc";
+// const API_KEY = "AIzaSyDhpNTbHbITjJad64MFgO4eRVkm-x6VQYc";
+const API_KEY = "AIzaSyC952tqsZvDXY6QexfE6heuP1veihU_VlI";
+let videoPageId: number | null = null;
 
 /**
  * 1. Search for channels matching `query`.
@@ -58,7 +68,6 @@ async function fetchChannelInfoByQuery(
     throw new Error(`YouTube Search API returned HTTP ${searchRes.status}`);
   }
   const searchJson = await searchRes.json();
-  console.log(searchJson);
 
   // Extract an array of objects: { id, channelTitle }
   const searchItems: SearchItem[] = searchJson.items || [];
@@ -74,27 +83,23 @@ async function fetchChannelInfoByQuery(
     }
   }
 
-  console.log("[BG] Channel IDs to fetch:", channelIds);
-
   if (channelIds.length === 0) {
     return [];
   }
 
   // ——— STEP B: Fetch snippet+statistics for those IDs ———
   const channelsUrl = new URL("https://www.googleapis.com/youtube/v3/channels");
-  channelsUrl.searchParams.set("part", "snippet,statistics");
+  channelsUrl.searchParams.set("part", "snippet,statistics,brandingSettings");
   channelsUrl.searchParams.set("id", channelIds.join(","));
   channelsUrl.searchParams.set("key", API_KEY);
 
-  console.log("[BG] Fetching channel details:", channelsUrl.toString());
-
   const channelsRes = await fetch(channelsUrl.toString());
-  console.log("[BG] channelsRes status:", channelsRes.status);
   if (!channelsRes.ok) {
     throw new Error(`YouTube Channels API returned HTTP ${channelsRes.status}`);
   }
   const channelsJson = await channelsRes.json();
-  console.log("[BG] channelsJson:", channelsJson);
+  // Log the full API response for debugging handle extraction
+  console.log("[BG] channelsJson.items:", channelsJson.items);
 
   // Map to ChannelInfo[], then sort
   const mapped: ChannelInfo[] = (channelsJson.items as ChannelsItem[]).map(
@@ -103,6 +108,10 @@ async function fetchChannelInfoByQuery(
       title: item.snippet.title,
       iconUrl: item.snippet.thumbnails.default.url,
       subscriberCount: item.statistics.subscriberCount,
+      // Use customUrl from snippet as handle (removing '@'), fallback to empty string
+      handle: item.snippet.customUrl
+        ? item.snippet.customUrl.replace(/^@/, "")
+        : "",
     })
   );
 
@@ -126,17 +135,30 @@ async function fetchChannelInfoByQuery(
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "FETCH_CHANNELS") {
-    console.log("[BG] Received FETCH_CHANNELS message:", message);
     fetchChannelInfoByQuery(message.query, message.maxResults)
       .then((channels) => {
-        console.log("[BG] Sending channels to popup:", channels);
         sendResponse({ channels });
       })
       .catch((err) => {
-        console.error("[BG] Error in fetchChannelInfoByQuery:", err);
         sendResponse({ error: err.message });
       });
     // Indicate that we will respond asynchronously
     return true;
+  } else if (message.action === "START_AUTOMATION") {
+    const videoPageUrl = `https://www.youtube.com/${message.selectedHandle?.handle}/videos`;
+    chrome.tabs.create({ url: videoPageUrl }, (tab) => {
+    videoPageId = tab.id ?? null;
+    console.log(tab.id, "tab id");
+    });
+
+    console.log(
+      "[BG] Starting automation for channel handle:",
+      message.selectedHandle?.handle
+    );
+
+    sendResponse({ status: "success", message: "Automation started" });
+  } else {
+    sendResponse({ status: "error", message: "Unknown action" });
   }
+  return true;
 });

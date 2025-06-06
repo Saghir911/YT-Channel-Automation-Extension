@@ -10,45 +10,6 @@ import { Separator } from "./Separator";
 
 import "./Popup.css";
 
-// Mock channel data for API simulation
-const mockChannelDatabase = [
-  {
-    id: "1",
-    name: "MrBeast",
-    subscribers: "224M subscribers",
-    avatar: "/placeholder.svg?height=48&width=48",
-    verified: true,
-  },
-  {
-    id: "2",
-    name: "PewDiePie",
-    subscribers: "111M subscribers",
-    avatar: "/placeholder.svg?height=48&width=48",
-    verified: true,
-  },
-  {
-    id: "3",
-    name: "Marques Brownlee",
-    subscribers: "18.1M subscribers",
-    avatar: "/placeholder.svg?height=48&width=48",
-    verified: true,
-  },
-  {
-    id: "4",
-    name: "Veritasium",
-    subscribers: "14.1M subscribers",
-    avatar: "/placeholder.svg?height=48&width=48",
-    verified: true,
-  },
-  {
-    id: "5",
-    name: "Linus Tech Tips",
-    subscribers: "15.8M subscribers",
-    avatar: "/placeholder.svg?height=48&width=48",
-    verified: true,
-  },
-];
-
 type SearchState = "idle" | "loading" | "success" | "error" | "no-results";
 
 export default function Component() {
@@ -56,8 +17,26 @@ export default function Component() {
   const [selectedChannel, setSelectedChannel] = useState<string | null>(null);
   const [searchState, setSearchState] = useState<SearchState>("idle");
   const [searchResults, setSearchResults] = useState<
-    typeof mockChannelDatabase
+    Array<{
+      id: string;
+      name: string;
+      subscribers: string;
+      avatar: string;
+      verified?: boolean;
+      handle?: string;
+    }>
   >([]);
+
+  const selectedChannelHandle = searchResults.find(
+    (channel) => channel.id === selectedChannel
+  );
+
+  function onStartAutomation() {
+    chrome.runtime.sendMessage({
+      action: "START_AUTOMATION",
+      selectedHandle: selectedChannelHandle,
+    });
+  }
 
   // Format subscriber count like YouTube (e.g., 5.8M, 123K, 999)
   function formatSubscribers(subs: string | number): string {
@@ -96,7 +75,7 @@ export default function Component() {
             name: ch.title, // API 'title' -> UI 'name'
             subscribers: formatSubscribers(ch.subscriberCount) + " subscribers", // Format for UI
             avatar: ch.iconUrl, // API 'iconUrl' -> UI 'avatar'
-            verified: false, // API does not provide, default to false
+            handle: ch.handle, // Pass handle to UI if present
           }));
           console.log("[POPUP] Mapped results:", mappedResults);
           setSearchResults(mappedResults);
@@ -195,16 +174,12 @@ export default function Component() {
                         height={40}
                         className="channel-avatar"
                       />
-                      {channel.verified && (
-                        <div className="verified-badge">
-                          <Check />
-                        </div>
-                      )}
                     </div>
 
                     <div className="channel-info">
                       <div className="channel-name">{channel.name}</div>
                       <div className="channel-handle">
+                        <span className="handle">@{channel.handle}</span>{" "}
                         {channel.subscribers}
                       </div>
                     </div>
@@ -277,7 +252,7 @@ export default function Component() {
         <>
           <Separator />
           <div className="footer">
-            <Button className="footer-btn">
+            <Button className="footer-btn" onClick={onStartAutomation}>
               <Sparkles />
               Start Automation
             </Button>
