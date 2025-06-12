@@ -35,22 +35,18 @@ export default function Component() {
   const channelListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    
-    if (whenSelected && channelListRef.current) {
-      // Animate fade out for unselected
+    if (!channelListRef.current) return;
+    const items = channelListRef.current.querySelectorAll(".channel-item");
+    // Only animate fade-out if more than one channel is present
+    if (whenSelected && searchResults.length > 1) {
       gsap.to(
         channelListRef.current.querySelectorAll(".channel-item:not(.selected)"),
-        { opacity: 0, scale: 0.95, duration: 0.3, pointerEvents: "none" }
+        { opacity: 0, scale: 0.95, duration: 0, pointerEvents: "none" }
       );
-    } else if (!whenSelected && channelListRef.current) {
-      // Instantly show all
-      gsap.set(channelListRef.current.querySelectorAll(".channel-item"), {
-        opacity: 1,
-        scale: 1,
-        clearProps: "pointerEvents",
-      });
+    } else {
+      gsap.set(items, { opacity: 1, scale: 1, clearProps: "pointerEvents" });
     }
-  }, [whenSelected, selectedChannel]);
+  }, [whenSelected, selectedChannel, searchResults.length]);
 
   useEffect(() => {
     if (selectedChannel === null) {

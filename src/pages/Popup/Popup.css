@@ -332,6 +332,7 @@
   position: relative;
   gap: var(--spacing-3);
   padding-bottom: var(--spacing-4);
+  height: 100vh;
 }
 
 .channel-item {
@@ -354,7 +355,7 @@
 .channel-item.selected {
   background-color: var(--color-primary-light);
   border-color: rgba(59, 130, 246, 0.3);
-  top: 5%;
+  top: 0;
   position: absolute;
   width: 100%;
 }
@@ -514,7 +515,7 @@
 .video-count-input-wrapper {
   position: absolute;
   display: flex;
-  top: 25%;
+  top: 66px;
   align-items: center;
   gap: 8px;
   margin: 12px 0px 8px 0px; /* extra top margin to sit below the selected channel */
