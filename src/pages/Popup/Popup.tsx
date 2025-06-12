@@ -14,11 +14,14 @@ import "./Popup.css";
 type SearchState = "idle" | "loading" | "success" | "error" | "no-results";
 
 export default function Component() {
+  // --- State management for search and selection ---
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedChannel, setSelectedChannel] = useState<string | null>(null);
+  const [selectedChannelId, setSelectedChannelId] = useState<string | null>(
+    null
+  );
   const [searchState, setSearchState] = useState<SearchState>("idle");
-  const [whenSelected, setwhenSelected] = useState(false);
-  const [searchResults, setSearchResults] = useState<
+  const [showVideoCountInput, setShowVideoCountInput] = useState(false);
+  const [channelResults, setChannelResults] = useState<
     Array<{
       id: string;
       name: string;
@@ -29,16 +32,15 @@ export default function Component() {
     }>
   >([]);
   const [videoCount, setVideoCount] = useState(1);
-  const minVideos = 1;
-  const maxVideos = 10;
-
+  const minVideos = 1,
+    maxVideos = 10;
   const channelListRef = useRef<HTMLDivElement>(null);
 
+  // --- Animate channel list when a channel is selected ---
   useEffect(() => {
     if (!channelListRef.current) return;
     const items = channelListRef.current.querySelectorAll(".channel-item");
-    // Only animate fade-out if more than one channel is present
-    if (whenSelected && searchResults.length > 1) {
+    if (showVideoCountInput && channelResults.length > 1) {
       gsap.to(
         channelListRef.current.querySelectorAll(".channel-item:not(.selected)"),
         { opacity: 0, scale: 0.95, duration: 0, pointerEvents: "none" }
@@ -46,106 +48,95 @@ export default function Component() {
     } else {
       gsap.set(items, { opacity: 1, scale: 1, clearProps: "pointerEvents" });
     }
-  }, [whenSelected, selectedChannel, searchResults.length]);
+  }, [showVideoCountInput, selectedChannelId, channelResults.length]);
 
+  // --- Reset video count input if no channel is selected ---
   useEffect(() => {
-    if (selectedChannel === null) {
-      // No channel is selected → reset whenSelected
-      setwhenSelected(false);
-    }
-  }, [selectedChannel]);
+    if (selectedChannelId === null) setShowVideoCountInput(false);
+  }, [selectedChannelId]);
 
-  const selectedChannelHandle = searchResults.find(
-    (channel) => channel.id === selectedChannel
-  );
-  function onStartAutomation() {
+  // --- Get selected channel data ---
+  const selectedChannel =
+    channelResults.find((c) => c.id === selectedChannelId) || null;
+
+  // --- Start automation for selected channel ---
+  const startAutomation = () => {
     chrome.runtime.sendMessage({
       action: "START_AUTOMATION",
-      selectedHandle: selectedChannelHandle,
+      selectedHandle: selectedChannel,
       maxResults: 5,
     });
-  }
-  function fetchUploadedVideosForSelectedChannel() {
-    if (!selectedChannelData?.id) {
+  };
+
+  // --- Fetch uploaded videos for selected channel ---
+  const fetchUploadedVideos = () => {
+    if (!selectedChannel?.id) {
       console.error("No channel selected or missing channel id");
       return;
     }
     chrome.runtime.sendMessage(
       {
         type: "FETCH_UPLOADED_VIDEOS",
-        channelId: selectedChannelData.id, // <-- This is the correct channel id
+        channelId: selectedChannel.id,
         noOfVideos: videoCount,
       },
       (response) => {
-        if (response.videoLinks) {
+        if (response.videoLinks)
           console.log("Video Links:", response.videoLinks);
-        } else {
-          console.error("Error fetching videos:", response.error);
-        }
+        else console.error("Error fetching videos:", response.error);
       }
     );
-  }
+  };
 
-  // Format subscriber count like YouTube (e.g., 5.8M, 123K, 999)
-  function formatSubscribers(subs: string | number): string {
+  // --- Format subscriber count for display ---
+  const formatSubscribers = (subs: string | number) => {
     const num = typeof subs === "number" ? subs : Number(subs);
     if (isNaN(num)) return String(subs);
     if (num >= 1_000_000)
       return (num / 1_000_000).toFixed(1).replace(/\.0$/, "") + "M";
     if (num >= 1_000) return (num / 1_000).toFixed(1).replace(/\.0$/, "") + "K";
     return num.toString();
-  }
+  };
 
-  const handleSearch = async () => {
+  // --- Search for channels using the query ---
+  const handleSearch = () => {
     if (!searchQuery.trim()) return;
     setSearchState("loading");
-    setSelectedChannel(null);
-
-    // Request real data from background script
+    setSelectedChannelId(null);
     chrome.runtime.sendMessage(
       { type: "FETCH_CHANNELS", query: searchQuery, maxResults: 5 },
       (response) => {
-        console.log("[POPUP] Got response from background:", response);
         if (chrome.runtime.lastError || !response) {
-          console.error(
-            "[POPUP] Error or no response:",
-            chrome.runtime.lastError,
-            response
-          );
-          setSearchResults([]);
+          setChannelResults([]);
           setSearchState("error");
           return;
         }
         if (response.channels && response.channels.length > 0) {
-          // Map API response to UI structure
-          const mappedResults = response.channels.map((ch: any) => ({
-            id: ch.id,
-            name: ch.title, // API 'title' -> UI 'name'
-            subscribers: formatSubscribers(ch.subscriberCount) + " subscribers", // Format for UI
-            avatar: ch.iconUrl, // API 'iconUrl' -> UI 'avatar'
-            handle: ch.handle, // Pass handle to UI if present
-          }));
-          console.log("[POPUP] Mapped results:", mappedResults);
-          setSearchResults(mappedResults);
+          setChannelResults(
+            response.channels.map((ch: any) => ({
+              id: ch.id,
+              name: ch.title,
+              subscribers:
+                formatSubscribers(ch.subscriberCount) + " subscribers",
+              avatar: ch.iconUrl,
+              handle: ch.handle,
+            }))
+          );
           setSearchState("success");
         } else {
-          setSearchResults([]);
+          setChannelResults([]);
           setSearchState("no-results");
         }
       }
     );
   };
 
+  // --- Handle Enter key for search ---
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
+    if (e.key === "Enter") handleSearch();
   };
 
-  const selectedChannelData = selectedChannel
-    ? searchResults.find((channel) => channel.id === selectedChannel)
-    : null;
-
+  // --- Render the main content area based on search state ---
   const renderContent = () => {
     switch (searchState) {
       case "idle":
@@ -163,7 +154,6 @@ export default function Component() {
             </div>
           </div>
         );
-
       case "loading":
         return (
           <div className="loading-state">
@@ -176,7 +166,6 @@ export default function Component() {
             </div>
           </div>
         );
-
       case "no-results":
         return (
           <div className="no-results-state">
@@ -194,22 +183,21 @@ export default function Component() {
             </div>
           </div>
         );
-
       case "success":
         return (
           <ScrollArea className="results-scroll">
             <div className="results-info">
-              Found {searchResults.length} result
-              {searchResults.length !== 1 ? "s" : ""} for &quot;{searchQuery}
+              Found {channelResults.length} result
+              {channelResults.length !== 1 ? "s" : ""} for &quot;{searchQuery}
               &quot;
             </div>
             <div className="channel-list" ref={channelListRef}>
-              {searchResults.map((channel) => {
-                const isSelected = selectedChannel === channel.id;
-
+              {channelResults.map((channel) => {
+                const isSelected = selectedChannelId === channel.id;
                 return (
                   <React.Fragment key={channel.id}>
-                    {whenSelected && isSelected && (
+                    {/* Show video count input below the selected channel */}
+                    {showVideoCountInput && isSelected && (
                       <div className="video-count-input-wrapper center">
                         <label
                           htmlFor="noOfVideoToAutomate"
@@ -223,9 +211,7 @@ export default function Component() {
                             className="video-count-btn"
                             onClick={(e) => {
                               e.stopPropagation();
-                              setVideoCount((prev) =>
-                                Math.max(minVideos, prev - 1)
-                              );
+                              setVideoCount((v) => Math.max(minVideos, v - 1));
                             }}
                             disabled={videoCount <= minVideos}
                           >
@@ -242,9 +228,7 @@ export default function Component() {
                             className="video-count-btn"
                             onClick={(e) => {
                               e.stopPropagation();
-                              setVideoCount((prev) =>
-                                Math.min(maxVideos, prev + 1)
-                              );
+                              setVideoCount((v) => Math.min(maxVideos, v + 1));
                             }}
                             disabled={videoCount >= maxVideos}
                           >
@@ -255,9 +239,9 @@ export default function Component() {
                     )}
                     <div
                       onClick={() => {
-                        setSelectedChannel(isSelected ? null : channel.id);
-                        setwhenSelected(true);
-                        if (isSelected) setwhenSelected(false);
+                        setSelectedChannelId(isSelected ? null : channel.id);
+                        setShowVideoCountInput(true);
+                        if (isSelected) setShowVideoCountInput(false);
                       }}
                       className={`channel-item${isSelected ? " selected" : ""}`}
                     >
@@ -270,12 +254,10 @@ export default function Component() {
                           className="channel-avatar"
                         />
                       </div>
-
                       <div className="channel-info">
                         <div className="channel-name">{channel.name}</div>
                         {channel.subscribers}
                       </div>
-
                       <div
                         className={`channel-select-indicator ${
                           isSelected ? "selected" : "default hovered"
@@ -294,12 +276,12 @@ export default function Component() {
             </div>
           </ScrollArea>
         );
-
       default:
         return null;
     }
   };
 
+  // --- Render the popup UI ---
   return (
     <div className="youtube-automation">
       <div className="you-header">
@@ -308,10 +290,7 @@ export default function Component() {
         </div>
         <h1 className="you-header-title">YouTube Automation</h1>
       </div>
-
       <Separator />
-
-      {/* Search Section */}
       <div className="search-section">
         <div className="search-row">
           <Input
@@ -334,22 +313,18 @@ export default function Component() {
           </Button>
         </div>
       </div>
-
       <Separator />
-
-      {/* Content Area */}
       <div className="content-area">{renderContent()}</div>
-
-      {/* Footer */}
-      {selectedChannelData && (
+      {/* Show footer only if a channel is selected */}
+      {selectedChannel && (
         <>
           <Separator />
           <div className="footer">
             <Button
               className="footer-btn"
               onClick={() => {
-                onStartAutomation();
-                fetchUploadedVideosForSelectedChannel();
+                startAutomation();
+                fetchUploadedVideos();
               }}
             >
               <Sparkles />
