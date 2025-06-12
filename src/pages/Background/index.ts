@@ -37,9 +37,9 @@ type ChannelsItem = {
   };
 };
 
-const API_KEY = "AIzaSyDhpNTbHbITjJad64MFgO4eRVkm-x6VQYc";
-// const API_KEY = "AIzaSyC952tqsZvDXY6QexfE6heuP1veihU_VlI";
-// let videoPageId: number | null = null;
+// const API_KEY = "AIzaSyDhpNTbHbITjJad64MFgO4eRVkm-x6VQYc";
+const API_KEY = "AIzaSyC952tqsZvDXY6QexfE6heuP1veihU_VlI";
+let channelPageId: number | null = null;
 
 /**
  * 1. Search for channels matching `query`.
@@ -137,40 +137,64 @@ async function fetchChannelInfoByQuery(
 }
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
-  if (message.type === "FETCH_CHANNELS") {
-    fetchChannelInfoByQuery(message.query, message.maxResults)
-      .then((channels) => {
+  (async () => {
+    try {
+      if (message.type === "FETCH_CHANNELS") {
+        const channels = await fetchChannelInfoByQuery(
+          message.query,
+          message.maxResults
+        );
         sendResponse({ channels });
-      })
-      .catch((err) => {
-        sendResponse({ error: err.message });
-      });
-    // Indicate that we will respond asynchronously
-    return true;
-  } else if (message.action === "START_AUTOMATION") {
-    const videoPageUrl = `https://www.youtube.com/@${message.selectedHandle?.handle}/videos`;
-    chrome.tabs.create({ url: videoPageUrl }, (tab) => {
-      // videoPageId = tab.id ?? null;
-    });
-    sendResponse({ status: "success", message: "Automation started" });
-    return true;
-  } else if (message.type === "FETCH_UPLOADED_VIDEOS") {
-    // You need to pass the channelId from the message
-    fetchUploadedVideos(message.channelId, message.noOfVideos)
-      .then((videoLinks) => {
-        sendResponse({ videoLinks });
-      })
-      .catch((err) => {
-        sendResponse({ error: err.message });
-      });
-    return true;
-  } else {
-    sendResponse({ status: "error", message: "Unknown action" });
-    return true;
-  }
+      } else if (message.action === "START_AUTOMATION") {
+        const channelPageUrl = `https://www.youtube.com/@${message.selectedHandle?.handle}/videos`;
+        chrome.tabs.create({ url: channelPageUrl }, (tab) => {
+          channelPageId = tab.id ?? null;
+        });
+        sendResponse({ status: "success", message: "Automation started" });
+      } else if (message.type === "FETCH_UPLOADED_VIDEOS") {
+        const uploadedVideoUrls = await fetchUploadedVideos(
+          message.channelId,
+          message.noOfVideos
+        );
+
+        await new Promise<void>((resolve) => {
+          chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
+            if (tabId === channelPageId && info.status === "complete") {
+              chrome.tabs.onUpdated.removeListener(listener);
+              resolve();
+            }
+          });
+        });
+
+        await new Promise((r) => setTimeout(r, 2000));
+
+        for (const uploadedVideoUrl of uploadedVideoUrls) {
+          console.log(uploadedVideoUrl);
+          await openAndAutomateVideo(uploadedVideoUrl);
+        }
+
+        if (channelPageId !== null) {
+          await chrome.tabs.update(channelPageId, { active: true });
+          setTimeout(() => {
+            chrome.tabs.remove(channelPageId!);
+            channelPageId = null;
+          }, 2000);
+        }
+        sendResponse({ videoLinks: uploadedVideoUrls });
+      } else {
+        sendResponse({ status: "error", message: "Unknown action" });
+      }
+    } catch (err) {
+      sendResponse({ error: err instanceof Error ? err.message : String(err) });
+    }
+  })();
+  return true;
 });
 
-async function fetchUploadedVideos(channelId: string, maxResults: number): Promise<string[]> {
+async function fetchUploadedVideos(
+  channelId: string,
+  maxResults: number
+): Promise<string[]> {
   // Step 1: Get contentDetails to extract uploads playlist ID
   const channelDetailsUrl = new URL(
     "https://www.googleapis.com/youtube/v3/channels"
@@ -214,4 +238,28 @@ async function fetchUploadedVideos(channelId: string, maxResults: number): Promi
   );
   console.log(videoLinks);
   return videoLinks;
+}
+
+async function openAndAutomateVideo(videoUrl: string): Promise<void> {
+  // Open each video in a new tab, wait for load, send the “startVideoAutomation” message,
+  // then wait for the content script’s response before closing the tab.
+  const tab = await chrome.tabs.create({ url: videoUrl, active: true });
+  const vidId = tab.id!;
+
+  await new Promise<void>((resolve) => {
+    chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
+      if (tabId === vidId && info.status === "complete") {
+        chrome.tabs.onUpdated.removeListener(listener);
+        chrome.tabs.sendMessage(
+          vidId,
+          { action: "startVideoAutomation" },
+          (res) => {
+            console.log("Content script replied:", res);
+            resolve();
+            chrome.tabs.remove(vidId);
+          }
+        );
+      }
+    });
+  });
 }
