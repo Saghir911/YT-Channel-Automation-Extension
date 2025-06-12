@@ -61,12 +61,32 @@ export default function Component() {
   const selectedChannelHandle = searchResults.find(
     (channel) => channel.id === selectedChannel
   );
-
   function onStartAutomation() {
     chrome.runtime.sendMessage({
       action: "START_AUTOMATION",
       selectedHandle: selectedChannelHandle,
+      maxResults: 5,
     });
+  }
+  function fetchUploadedVideosForSelectedChannel() {
+    if (!selectedChannelData?.id) {
+      console.error("No channel selected or missing channel id");
+      return;
+    }
+    chrome.runtime.sendMessage(
+      {
+        type: "FETCH_UPLOADED_VIDEOS",
+        channelId: selectedChannelData.id, // <-- This is the correct channel id
+        noOfVideos: videoCount,
+      },
+      (response) => {
+        if (response.videoLinks) {
+          console.log("Video Links:", response.videoLinks);
+        } else {
+          console.error("Error fetching videos:", response.error);
+        }
+      }
+    );
   }
 
   // Format subscriber count like YouTube (e.g., 5.8M, 123K, 999)
@@ -328,7 +348,13 @@ export default function Component() {
         <>
           <Separator />
           <div className="footer">
-            <Button className="footer-btn" onClick={onStartAutomation}>
+            <Button
+              className="footer-btn"
+              onClick={() => {
+                onStartAutomation();
+                fetchUploadedVideosForSelectedChannel();
+              }}
+            >
               <Sparkles />
               Start Automation
             </Button>
