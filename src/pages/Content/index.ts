@@ -1,5 +1,3 @@
-
-
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   if (request.action === "startVideoAutomation") {
     (async () => {
@@ -103,8 +101,6 @@ async function automateThisVideo() {
   }
 }
 
-
-
 if (/youtube\.com\/@[^/]+\/videos/.test(window.location.href)) {
   injectStopAutomationButton();
 }
@@ -118,23 +114,46 @@ function injectStopAutomationButton() {
     top: "56px",
     right: "28px",
     zIndex: "9999",
-    background: "#e53935",
+    background: "linear-gradient(90deg, #3b82f6 0%, #2563eb 100%)",
     color: "#fff",
     border: "none",
-    borderRadius: "4px",
-    padding: "12px 24px",
+    borderRadius: "8px",
+    padding: "12px 28px 12px 44px",
     fontSize: "16px",
     fontWeight: "bold",
     cursor: "pointer",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-    transition: "background 0.2s",
+    boxShadow: "0 4px 16px rgba(59,130,246,0.18)",
+    transition: "background 0.18s, box-shadow 0.18s, transform 0.12s",
+    letterSpacing: "0.03em",
+    outline: "none",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    fontFamily: "SF Pro Display, Segoe UI, Arial, sans-serif",
   });
+
+  // Add extension icon (SVG) to the left
+  const icon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  icon.setAttribute("width", "22");
+  icon.setAttribute("height", "22");
+  icon.setAttribute("viewBox", "0 0 24 24");
+  icon.style.position = "absolute";
+  icon.style.left = "16px";
+  icon.style.top = "50%";
+  icon.style.transform = "translateY(-50%)";
+  icon.innerHTML = `<circle cx="12" cy="12" r="10" fill="#fff" opacity="0.13"/><path d="M8 8h8v8H8z" fill="#fff"/><path d="M12 7v10M7 12h10" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+  btn.appendChild(icon);
+
   btn.onmouseenter = () => {
-    btn.style.background = "#b71c1c";
+    btn.style.background = "linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%)";
+    btn.style.boxShadow = "0 6px 20px rgba(37,99,235,0.22)";
+    btn.style.transform = "translateY(-2px) scale(1.03)";
     btn.style.animationPlayState = "paused";
   };
   btn.onmouseleave = () => {
-    btn.style.background = "#e53935";
+    btn.style.background = "linear-gradient(90deg, #3b82f6 0%, #2563eb 100%)";
+    btn.style.boxShadow = "0 4px 16px rgba(59,130,246,0.18)";
+    btn.style.transform = "none";
     btn.style.animationPlayState = "running";
   };
 
@@ -143,22 +162,27 @@ function injectStopAutomationButton() {
   style.textContent = `
     @keyframes ytStopBtnBounce {
       0% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
+      50% { transform: translateY(-10px); }
       100% { transform: translateY(0); }
     }
     #yt-stop-automation-btn {
-      animation: ytStopBtnBounce 1.2s infinite ease-in-out;
+      animation: ytStopBtnBounce 1.2s infinite cubic-bezier(.6,-0.28,.74,1.25);
       animation-play-state: running;
     }
     #yt-stop-automation-btn:hover {
       animation-play-state: paused;
     }
     #yt-stop-automation-btn.yt-stop-automation-btn-disabled {
-      background: #888 !important;
+      background: linear-gradient(90deg, #bdbdbd 0%, #888 100%) !important;
+      color: #f3f4f6 !important;
       cursor: not-allowed !important;
       pointer-events: none !important;
-      opacity: 0.6 !important;
+      opacity: 0.7 !important;
       animation-play-state: paused !important;
+      box-shadow: none !important;
+    }
+    #yt-stop-automation-btn svg {
+      margin-right: 0;
     }
   `;
 
@@ -169,10 +193,12 @@ function injectStopAutomationButton() {
         btn.textContent = "Stopped";
         btn.disabled = true;
         btn.setAttribute("disabled", "disabled");
-        btn.style.background = "#888";
+        btn.style.background = "linear-gradient(90deg, #bdbdbd 0%, #888 100%)";
+        btn.style.color = "#f3f4f6";
         btn.style.cursor = "not-allowed";
         btn.style.pointerEvents = "none";
-        btn.style.opacity = "0.6";
+        btn.style.opacity = "0.7";
+        btn.style.boxShadow = "none";
         btn.style.animationPlayState = "paused";
         btn.classList.add("yt-stop-automation-btn-disabled");
       }
