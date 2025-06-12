@@ -1,3 +1,5 @@
+
+
 chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
   if (request.action === "startVideoAutomation") {
     (async () => {
@@ -99,4 +101,87 @@ async function automateThisVideo() {
   } catch (e) {
     console.error("[Content] Comment fetch failed:", e);
   }
+}
+
+
+
+if (/youtube\.com\/@[^/]+\/videos/.test(window.location.href)) {
+  injectStopAutomationButton();
+}
+
+function injectStopAutomationButton() {
+  const btn = document.createElement("button");
+  btn.id = "yt-stop-automation-btn";
+  btn.textContent = "Stop Automation";
+  Object.assign(btn.style, {
+    position: "fixed",
+    top: "56px",
+    right: "28px",
+    zIndex: "9999",
+    background: "#e53935",
+    color: "#fff",
+    border: "none",
+    borderRadius: "4px",
+    padding: "12px 24px",
+    fontSize: "16px",
+    fontWeight: "bold",
+    cursor: "pointer",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+    transition: "background 0.2s",
+  });
+  btn.onmouseenter = () => {
+    btn.style.background = "#b71c1c";
+    btn.style.animationPlayState = "paused";
+  };
+  btn.onmouseleave = () => {
+    btn.style.background = "#e53935";
+    btn.style.animationPlayState = "running";
+  };
+
+  // 2) Add the bounce‐keyframes style and a disabled state style
+  const style = document.createElement("style");
+  style.textContent = `
+    @keyframes ytStopBtnBounce {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+      100% { transform: translateY(0); }
+    }
+    #yt-stop-automation-btn {
+      animation: ytStopBtnBounce 1.2s infinite ease-in-out;
+      animation-play-state: running;
+    }
+    #yt-stop-automation-btn:hover {
+      animation-play-state: paused;
+    }
+    #yt-stop-automation-btn.yt-stop-automation-btn-disabled {
+      background: #888 !important;
+      cursor: not-allowed !important;
+      pointer-events: none !important;
+      opacity: 0.6 !important;
+      animation-play-state: paused !important;
+    }
+  `;
+
+  // 3) When user clicks “Stop Automation,” send a message to background
+  btn.addEventListener("click", () => {
+    chrome.runtime.sendMessage({ action: "stopAutomation" }, (response) => {
+      if (response?.status === "stopped") {
+        btn.textContent = "Stopped";
+        btn.disabled = true;
+        btn.setAttribute("disabled", "disabled");
+        btn.style.background = "#888";
+        btn.style.cursor = "not-allowed";
+        btn.style.pointerEvents = "none";
+        btn.style.opacity = "0.6";
+        btn.style.animationPlayState = "paused";
+        btn.classList.add("yt-stop-automation-btn-disabled");
+      }
+    });
+  });
+
+  // 4) Wait for DOMContentLoaded before injecting <style> & <button>
+  window.addEventListener("DOMContentLoaded", () => {
+    document.head.appendChild(style);
+    document.body.appendChild(btn);
+  });
 }

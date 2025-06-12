@@ -35,6 +35,7 @@ export default function Component() {
   const channelListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    
     if (whenSelected && channelListRef.current) {
       // Animate fade out for unselected
       gsap.to(

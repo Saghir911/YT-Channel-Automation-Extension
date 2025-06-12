@@ -1,4 +1,7 @@
-// import { Chrome, CookingPot, Send } from "lucide-react";
+// const API_KEY = "AIzaSyDhpNTbHbITjJad64MFgO4eRVkm-x6VQYc";
+const API_KEY = "AIzaSyC952tqsZvDXY6QexfE6heuP1veihU_VlI";
+let channelPageId: number | null = null;
+let automationState = false;
 
 type ChannelInfo = {
   id: string;
@@ -36,10 +39,6 @@ type ChannelsItem = {
     };
   };
 };
-
-// const API_KEY = "AIzaSyDhpNTbHbITjJad64MFgO4eRVkm-x6VQYc";
-const API_KEY = "AIzaSyC952tqsZvDXY6QexfE6heuP1veihU_VlI";
-let channelPageId: number | null = null;
 
 /**
  * 1. Search for channels matching `query`.
@@ -146,6 +145,12 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         );
         sendResponse({ channels });
       } else if (message.action === "START_AUTOMATION") {
+        if (automationState) {
+          // already running; ignore
+          sendResponse({ status: "already_running" });
+          return true;
+        }
+        automationState = true;
         const channelPageUrl = `https://www.youtube.com/@${message.selectedHandle?.handle}/videos`;
         chrome.tabs.create({ url: channelPageUrl }, (tab) => {
           channelPageId = tab.id ?? null;
@@ -169,7 +174,10 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         await new Promise((r) => setTimeout(r, 2000));
 
         for (const uploadedVideoUrl of uploadedVideoUrls) {
-          console.log(uploadedVideoUrl);
+          if (!automationState) {
+            // user clicked “Stop” -> break out
+            break;
+          }
           await openAndAutomateVideo(uploadedVideoUrl);
         }
 
@@ -180,7 +188,15 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
             channelPageId = null;
           }, 2000);
         }
+
         sendResponse({ videoLinks: uploadedVideoUrls });
+      } else if (message.action === "stopAutomation") {
+        automationState = false;
+        console.log(
+          "[BG] Received stopAutomation message, automationState set to false"
+        );
+        sendResponse({ status: "stopped" });
+        return true;
       } else {
         sendResponse({ status: "error", message: "Unknown action" });
       }
