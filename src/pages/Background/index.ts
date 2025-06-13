@@ -1,5 +1,6 @@
 // --- YouTube Data API Key ---
-const API_KEY = "AIzaSyC952tqsZvDXY6QexfE6heuP1veihU_VlI";
+// const API_KEY = "AIzaSyC952tqsZvDXY6QexfE6heuP1veihU_VlI";
+const API_KEY = "AIzaSyDhpNTbHbITjJad64MFgO4eRVkm-x6VQYc";
 let channelPageTabId: number | null = null;
 let isAutomationActive = false;
 
@@ -8,7 +9,7 @@ type ChannelInfo = {
   id: string;
   title: string;
   iconUrl: string;
-  subscriberCount: string;
+  subscriberCount: string; 
   handle: string;
 };
 

@@ -204,6 +204,8 @@ function injectStopAutomationButton() {
   btn.addEventListener("click", () => {
     chrome.runtime.sendMessage({ action: "stopAutomation" }, (response) => {
       if (response?.status === "stopped") {
+        // Remove icon and reclaim space
+        if (icon.parentNode) icon.parentNode.removeChild(icon);
         btn.textContent = "Stopped";
         btn.disabled = true;
         btn.setAttribute("disabled", "disabled");
@@ -215,6 +217,7 @@ function injectStopAutomationButton() {
         btn.style.boxShadow = "none";
         btn.style.animationPlayState = "paused";
         btn.classList.add("yt-stop-automation-btn-disabled");
+        btn.style.paddingLeft = "28px"; // Remove icon space
       }
     });
   });
