@@ -50,6 +50,8 @@ async function fetchChannelInfoByQuery(
     .map((item) => item.snippet.channelId)
     .filter(Boolean);
   if (!channelIds.length) return [];
+
+  // Fetch channel details using the channel IDs
   const channelsUrl = new URL("https://www.googleapis.com/youtube/v3/channels");
   channelsUrl.searchParams.set(
     "part",

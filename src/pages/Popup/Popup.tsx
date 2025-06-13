@@ -52,7 +52,10 @@ export default function Component() {
 
   // --- Reset video count input if no channel is selected ---
   useEffect(() => {
-    if (selectedChannelId === null) setShowVideoCountInput(false);
+    if (selectedChannelId === null) {
+      setShowVideoCountInput(false);
+      setVideoCount(1);
+    }
   }, [selectedChannelId]);
 
   // --- Get selected channel data ---
