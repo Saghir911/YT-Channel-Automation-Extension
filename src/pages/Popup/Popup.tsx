@@ -20,7 +20,7 @@ export default function Component() {
     null
   );
   const [searchState, setSearchState] = useState<SearchState>("idle");
-  const [showVideoCountInput, setShowVideoCountInput] = useState(false);
+  const [showResultCount, setShowResultCount] = useState(false);
   const [channelResults, setChannelResults] = useState<
     Array<{
       id: string;
@@ -40,7 +40,7 @@ export default function Component() {
   useEffect(() => {
     if (!channelListRef.current) return;
     const items = channelListRef.current.querySelectorAll(".channel-item");
-    if (showVideoCountInput && channelResults.length > 1) {
+    if (showResultCount && channelResults.length > 1) {
       gsap.to(
         channelListRef.current.querySelectorAll(".channel-item:not(.selected)"),
         { opacity: 0, scale: 0.95, duration: 0, pointerEvents: "none" }
@@ -48,12 +48,12 @@ export default function Component() {
     } else {
       gsap.set(items, { opacity: 1, scale: 1, clearProps: "pointerEvents" });
     }
-  }, [showVideoCountInput, selectedChannelId, channelResults.length]);
+  }, [showResultCount, selectedChannelId, channelResults.length]);
 
   // --- Reset video count input if no channel is selected ---
   useEffect(() => {
     if (selectedChannelId === null) {
-      setShowVideoCountInput(false);
+      setShowResultCount(false);
       setVideoCount(1);
     }
   }, [selectedChannelId]);
@@ -68,28 +68,9 @@ export default function Component() {
       action: "START_AUTOMATION",
       selectedHandle: selectedChannel,
       maxResults: 5,
+      count: videoCount,
     });
   };
-
-  // --- Fetch uploaded videos for selected channel ---
-  const fetchUploadedVideos = () => {
-    chrome.runtime.sendMessage(
-      {
-        type: "FETCH_UPLOADED_VIDEOS",
-        noOfVideos: videoCount,
-      },
-      (response) => {
-        if (response && response.videoLinks) {
-          console.log("Video Links:", response.videoLinks);
-        } else {
-          console.error("Error fetching videos:", response?.error || "Unknown error");
-        }
-      }
-    );
-  };
-
-  fetchUploadedVideos();
-
   // --- Format subscriber count for display ---
   const formatSubscribers = (subs: string | number) => {
     const num = typeof subs === "number" ? subs : Number(subs);
@@ -199,7 +180,7 @@ export default function Component() {
                 return (
                   <React.Fragment key={channel.id}>
                     {/* Show video count input below the selected channel */}
-                    {showVideoCountInput && isSelected && (
+                    {showResultCount && isSelected && (
                       <div className="video-count-input-wrapper center">
                         <label
                           htmlFor="noOfVideoToAutomate"
@@ -242,8 +223,8 @@ export default function Component() {
                     <div
                       onClick={() => {
                         setSelectedChannelId(isSelected ? null : channel.id);
-                        setShowVideoCountInput(true);
-                        if (isSelected) setShowVideoCountInput(false);
+                        setShowResultCount(true);
+                        if (isSelected) setShowResultCount(false);
                       }}
                       className={`channel-item${isSelected ? " selected" : ""}`}
                     >

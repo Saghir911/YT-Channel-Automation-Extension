@@ -90,6 +90,37 @@ async function fetchChannelInfoByQuery(
 }
 
 // --- Chrome message listener: handles all extension actions ---
+// chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+//   (async () => {
+//     try {
+//       if (message.type === "FETCH_CHANNELS") {
+//         // Search for channels
+//         const channels = await fetchChannelInfoByQuery(
+//           message.query,
+//           message.maxResults
+//         );
+//         sendResponse({ channels });
+//       } else if (message.action === "START_AUTOMATION") {
+//         // Start automation: open channel videos page
+//         const channelPageUrl = `https://www.youtube.com/@${message.selectedHandle?.handle}/videos`;
+//         chrome.tabs.create({ url: channelPageUrl }, (tab) => {
+//           channelPageTabId = tab.id ?? null;
+//         });
+//         sendResponse({ status: "success", message: "Automation started" });
+//       } else {
+//         sendResponse({ status: "error", message: "Unknown action" });
+//       }
+//     } catch (err) {
+//       sendResponse({ error: err instanceof Error ? err.message : String(err) });
+//     }
+//   })();
+
+//   // Listen for tab updates to check when the page is fully loaded
+
+//   // Indicate async response
+//   return true;
+// });
+
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   (async () => {
     try {
@@ -101,32 +132,37 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         );
         sendResponse({ channels });
       } else if (message.action === "START_AUTOMATION") {
+        console.log("no of videos", message.count);
         // Start automation: open channel videos page
         const channelPageUrl = `https://www.youtube.com/@${message.selectedHandle?.handle}/videos`;
         chrome.tabs.create({ url: channelPageUrl }, (tab) => {
-          channelPageTabId = tab.id ?? null;
+          const tabId = tab.id ?? null;
+          if (tabId !== null) {
+            // Listen for the tab to finish loading
+            const onUpdatedListener = (
+              updatedTabId: number,
+              info: chrome.tabs.TabChangeInfo
+            ) => {
+              if (updatedTabId === tabId && info.status === "complete") {
+                chrome.tabs.onUpdated.removeListener(onUpdatedListener);
+                // Send message to content script
+                chrome.tabs.sendMessage(tabId, {
+                  action: "FETCH_UPLOADED_VIDEOS",
+                  count: message.count,
+                });
+              }
+            };
+            chrome.tabs.onUpdated.addListener(onUpdatedListener);
+          }
         });
         sendResponse({ status: "success", message: "Automation started" });
-      }
-      //  else if (message.type === "GetVideoUrlArray") {
-      //   await new Promise<void>((resolve) => {
-      //     chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
-      //       if (tabId === channelPageTabId && info.status === "complete") {
-      //         chrome.tabs.onUpdated.removeListener(listener);
-      //         resolve();
-      //       }
-      //     });
-      //   });
-      // } 
-      else {
+      } else {
         sendResponse({ status: "error", message: "Unknown action" });
       }
     } catch (err) {
       sendResponse({ error: err instanceof Error ? err.message : String(err) });
     }
   })();
-
-  // Listen for tab updates to check when the page is fully loaded
 
   // Indicate async response
   return true;

@@ -2,8 +2,8 @@ console.log("[Content Script] ✅ Content script loaded");
 
 let lastFetchedIndex = 0;
 
-
 function fetchNextVideoUrls(noOfUrls: number): string[] {
+  console.log("Function Running");
   const contents = document.getElementById("contents");
   if (!contents) {
     console.error("❌ #contents not found");
@@ -11,7 +11,7 @@ function fetchNextVideoUrls(noOfUrls: number): string[] {
   }
 
   const items = Array.from(
-    contents.querySelectorAll("ytd-rich-item-renderer") 
+    contents.querySelectorAll("ytd-rich-item-renderer")
   ) as HTMLElement[];
 
   const urls: string[] = [];
@@ -20,7 +20,9 @@ function fetchNextVideoUrls(noOfUrls: number): string[] {
     const item = items[lastFetchedIndex];
     lastFetchedIndex++;
 
-    const anchor = item.querySelector("ytd-thumbnail a#thumbnail") as HTMLAnchorElement | null;
+    const anchor = item.querySelector(
+      "ytd-thumbnail a#thumbnail"
+    ) as HTMLAnchorElement | null;
     if (anchor?.href) {
       urls.push(anchor.href);
     }
@@ -30,22 +32,21 @@ function fetchNextVideoUrls(noOfUrls: number): string[] {
   return urls;
 }
 
+// setTimeout(() => fetchNextVideoUrls(5), 4000);
 
-setTimeout(() => fetchNextVideoUrls(5), 4000);
-
-
-// chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-//   if (request.action === "FETCH_UPLOADED_VIDEOS") {
-//     setTimeout(() => {
-//       const links = fetchLatestVideoUrls(request.noOfVideos);
-//       console.log("[Content Script] Extracted video links:", links);
-//       sendResponse({ videoLinks: links });
-//     }, 4000);
-
-//     return true; // Keeps message channel open for async response
-//   }
-// });
-
+// SINGLE UNIFIED MESSAGE LISTENER
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log("Content script received message:", request);
+  // Handle video fetching request
+  if (request.action === "FETCH_UPLOADED_VIDEOS") {
+    console.log("Processing video fetch request...");
+    setTimeout(() => {
+      const links = fetchNextVideoUrls(request.count);
+      sendResponse({ videoLinks: links });
+    }, 4000);
+    return true;
+  }
+});
 // --- Utility: Wait Helper ---
 // const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
