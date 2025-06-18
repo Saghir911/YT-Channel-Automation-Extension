@@ -73,23 +73,22 @@ export default function Component() {
 
   // --- Fetch uploaded videos for selected channel ---
   const fetchUploadedVideos = () => {
-    if (!selectedChannel?.id) {
-      console.error("No channel selected or missing channel id");
-      return;
-    }
     chrome.runtime.sendMessage(
       {
         type: "FETCH_UPLOADED_VIDEOS",
-        channelId: selectedChannel.id,
         noOfVideos: videoCount,
       },
       (response) => {
-        if (response.videoLinks)
+        if (response && response.videoLinks) {
           console.log("Video Links:", response.videoLinks);
-        else console.error("Error fetching videos:", response.error);
+        } else {
+          console.error("Error fetching videos:", response?.error || "Unknown error");
+        }
       }
     );
   };
+
+  fetchUploadedVideos();
 
   // --- Format subscriber count for display ---
   const formatSubscribers = (subs: string | number) => {
@@ -327,7 +326,6 @@ export default function Component() {
               className="footer-btn"
               onClick={() => {
                 startAutomation();
-                fetchUploadedVideos();
               }}
             >
               <Sparkles />

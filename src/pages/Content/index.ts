@@ -1,24 +1,57 @@
-// --- Listen for Automation Start ---
-chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
-  if (request.action === "startVideoAutomation") {
-    (async () => {
-      try {
-        await automateThisVideo();
-        sendResponse({ status: "done" });
-      } catch (err: any) {
-        console.error("[Content] Automation error:", err);
-        sendResponse({ status: "error", error: err.message });
-      }
-    })();
-    // Indicate async response
-    return true;
+console.log("[Content Script] ✅ Content script loaded");
+
+let lastFetchedIndex = 0;
+
+
+function fetchNextVideoUrls(noOfUrls: number): string[] {
+  const contents = document.getElementById("contents");
+  if (!contents) {
+    console.error("❌ #contents not found");
+    return [];
   }
-});
+
+  const items = Array.from(
+    contents.querySelectorAll("ytd-rich-item-renderer") 
+  ) as HTMLElement[];
+
+  const urls: string[] = [];
+
+  while (lastFetchedIndex < items.length && urls.length < noOfUrls) {
+    const item = items[lastFetchedIndex];
+    lastFetchedIndex++;
+
+    const anchor = item.querySelector("ytd-thumbnail a#thumbnail") as HTMLAnchorElement | null;
+    if (anchor?.href) {
+      urls.push(anchor.href);
+    }
+  }
+
+  console.log("✅ Fetched URLs:", urls);
+  return urls;
+}
+
+
+setTimeout(() => fetchNextVideoUrls(5), 4000);
+
+
+// chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+//   if (request.action === "FETCH_UPLOADED_VIDEOS") {
+//     setTimeout(() => {
+//       const links = fetchLatestVideoUrls(request.noOfVideos);
+//       console.log("[Content Script] Extracted video links:", links);
+//       sendResponse({ videoLinks: links });
+//     }, 4000);
+
+//     return true; // Keeps message channel open for async response
+//   }
+// });
 
 // --- Utility: Wait Helper ---
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+// const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // --- Main Automation Logic ---
+// The automateThisVideo function is now disabled/commented out as per user request.
+/*
 async function automateThisVideo() {
   // CSS selectors for YouTube UI elements
   const selectors = {
@@ -109,6 +142,7 @@ async function automateThisVideo() {
     console.error("[Content] Comment fetch failed:", e);
   }
 }
+*/
 
 // --- Inject Stop Automation Button on Channel Videos Page ---
 if (/youtube\.com\/@[^/]+\/videos/.test(window.location.href)) {

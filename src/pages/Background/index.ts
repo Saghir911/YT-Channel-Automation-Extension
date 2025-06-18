@@ -1,15 +1,15 @@
 // --- YouTube Data API Key ---
 // const API_KEY = "AIzaSyC952tqsZvDXY6QexfE6heuP1veihU_VlI";
 const API_KEY = "AIzaSyDhpNTbHbITjJad64MFgO4eRVkm-x6VQYc";
+// Fixed type annotation for channelPageTabId
 let channelPageTabId: number | null = null;
-let isAutomationActive = false;
 
 // --- Types ---
 type ChannelInfo = {
   id: string;
   title: string;
   iconUrl: string;
-  subscriberCount: string; 
+  subscriberCount: string;
   handle: string;
 };
 
@@ -102,118 +102,32 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
         sendResponse({ channels });
       } else if (message.action === "START_AUTOMATION") {
         // Start automation: open channel videos page
-        if (isAutomationActive)
-          return sendResponse({ status: "already_running" });
-        isAutomationActive = true;
         const channelPageUrl = `https://www.youtube.com/@${message.selectedHandle?.handle}/videos`;
         chrome.tabs.create({ url: channelPageUrl }, (tab) => {
           channelPageTabId = tab.id ?? null;
         });
         sendResponse({ status: "success", message: "Automation started" });
-      } else if (message.type === "FETCH_UPLOADED_VIDEOS") {
-        // Fetch uploaded videos and automate each
-        const uploadedVideoUrls = await fetchUploadedVideos(
-          message.channelId,
-          message.noOfVideos
-        );
-        // Wait for channel page to load
-        await new Promise<void>((resolve) => {
-          chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
-            if (tabId === channelPageTabId && info.status === "complete") {
-              chrome.tabs.onUpdated.removeListener(listener);
-              resolve();
-            }
-          });
-        });
-        await new Promise((r) => setTimeout(r, 2000));
-        for (const uploadedVideoUrl of uploadedVideoUrls) {
-          if (!isAutomationActive) break;
-          await openAndAutomateVideo(uploadedVideoUrl);
-        }
-        // Close channel page tab after automation
-        if (channelPageTabId !== null) {
-          await chrome.tabs.update(channelPageTabId, { active: true });
-          setTimeout(() => {
-            chrome.tabs.remove(channelPageTabId!);
-            channelPageTabId = null;
-          }, 2000);
-        }
-        sendResponse({ videoLinks: uploadedVideoUrls });
-      } else if (message.action === "stopAutomation") {
-        // Stop automation
-        isAutomationActive = false;
-        sendResponse({ status: "stopped" });
-        return true;
-      } else {
+      }
+      //  else if (message.type === "GetVideoUrlArray") {
+      //   await new Promise<void>((resolve) => {
+      //     chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
+      //       if (tabId === channelPageTabId && info.status === "complete") {
+      //         chrome.tabs.onUpdated.removeListener(listener);
+      //         resolve();
+      //       }
+      //     });
+      //   });
+      // } 
+      else {
         sendResponse({ status: "error", message: "Unknown action" });
       }
     } catch (err) {
       sendResponse({ error: err instanceof Error ? err.message : String(err) });
     }
   })();
+
+  // Listen for tab updates to check when the page is fully loaded
+
   // Indicate async response
   return true;
 });
-
-// --- Fetch uploaded videos for a channel ---
-async function fetchUploadedVideos(
-  channelId: string,
-  maxResults: number
-): Promise<string[]> {
-  // Get uploads playlist ID
-  const channelDetailsUrl = new URL(
-    "https://www.googleapis.com/youtube/v3/channels"
-  );
-  channelDetailsUrl.searchParams.set("part", "contentDetails");
-  channelDetailsUrl.searchParams.set("id", channelId);
-  channelDetailsUrl.searchParams.set("key", API_KEY);
-  const detailsRes = await fetch(channelDetailsUrl.toString());
-  if (!detailsRes.ok)
-    throw new Error(
-      `YouTube API (contentDetails) returned HTTP ${detailsRes.status}`
-    );
-  const detailsJson = await detailsRes.json();
-  const uploadsPlaylistId =
-    detailsJson.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
-  if (!uploadsPlaylistId) throw new Error("Upload playlist not found");
-
-  // Get videos from playlist
-  const playlistItemsUrl = new URL(
-    "https://www.googleapis.com/youtube/v3/playlistItems"
-  );
-  playlistItemsUrl.searchParams.set("part", "snippet");
-  playlistItemsUrl.searchParams.set("playlistId", uploadsPlaylistId);
-  playlistItemsUrl.searchParams.set("maxResults", maxResults.toString());
-  playlistItemsUrl.searchParams.set("key", API_KEY);
-  const playlistRes = await fetch(playlistItemsUrl.toString());
-  if (!playlistRes.ok)
-    throw new Error(
-      `YouTube API (playlistItems) returned HTTP ${playlistRes.status}`
-    );
-  const playlistJson = await playlistRes.json();
-  return playlistJson.items.map(
-    (item: any) =>
-      `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`
-  );
-}
-
-// --- Open a video in a new tab and trigger automation ---
-async function openAndAutomateVideo(videoUrl: string): Promise<void> {
-  const tab = await chrome.tabs.create({ url: videoUrl, active: true });
-  const videoTabId = tab.id!;
-  await new Promise<void>((resolve) => {
-    chrome.tabs.onUpdated.addListener(function listener(tabId, info) {
-      if (tabId === videoTabId && info.status === "complete") {
-        chrome.tabs.onUpdated.removeListener(listener);
-        chrome.tabs.sendMessage(
-          videoTabId,
-          { action: "startVideoAutomation" },
-          () => {
-            resolve();
-            chrome.tabs.remove(videoTabId);
-          }
-        );
-      }
-    });
-  });
-}
