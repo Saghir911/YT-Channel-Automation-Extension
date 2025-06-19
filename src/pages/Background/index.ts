@@ -112,45 +112,43 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
           }
           isAutomationActive = true;
 
-          if (channelPageTabId !== null) {
-            // Wait for the tab to finish loading
-            const onUpdatedListener = (
-              updatedTabId: number,
-              info: chrome.tabs.TabChangeInfo
-            ) => {
-              if (
-                updatedTabId === channelPageTabId &&
-                info.status === "complete"
-              ) {
-                chrome.tabs.onUpdated.removeListener(onUpdatedListener);
-                // Ask content script for video URLs and start automation when received
-                chrome.tabs.sendMessage(
-                  channelPageTabId,
-                  { action: "FETCH_UPLOADED_VIDEOS", count: message.count },
+          // Wait for the tab to finish loading
+          const onUpdatedListener = (
+            updatedTabId: number,
+            info: chrome.tabs.TabChangeInfo
+          ) => {
+            if (
+              updatedTabId === channelPageTabId &&
+              info.status === "complete"
+            ) {
+              chrome.tabs.onUpdated.removeListener(onUpdatedListener);
+              // Ask content script for video URLs and start automation when received
+              chrome.tabs.sendMessage(
+                channelPageTabId,
+                { action: "FETCH_UPLOADED_VIDEOS", count: message.count },
 
-                  async (response) => {
-                    const videosUrlArray = response?.videoLinks || [];
-                    console.log("All Url of video", videosUrlArray);
-                    for (const url of videosUrlArray) {
-                      console.log("url of single video:", url);
-                      if (!isAutomationActive) break;
-                      await openAndAutomateVideo(url);
-                    }
-                    if (channelPageTabId !== null) {
-                      await chrome.tabs.update(channelPageTabId, {
-                        active: true,
-                      });
-                      setTimeout(() => {
-                        chrome.tabs.remove(channelPageTabId!);
-                        channelPageTabId = null;
-                      }, 10000);
-                    }
+                async (response) => {
+                  const videosUrlArray = response?.videoLinks || [];
+                  console.log("All Url of video", videosUrlArray);
+                  for (const url of videosUrlArray) {
+                    console.log("url of single video:", url);
+                    if (!isAutomationActive) break;
+                    await openAndAutomateVideo(url);
                   }
-                );
-              }
-            };
-            chrome.tabs.onUpdated.addListener(onUpdatedListener);
-          }
+                  if (channelPageTabId !== null) {
+                    await chrome.tabs.update(channelPageTabId, {
+                      active: true,
+                    });
+                    setTimeout(() => {
+                      chrome.tabs.remove(channelPageTabId!);
+                      channelPageTabId = null;
+                    }, 2000);
+                  }
+                }
+              );
+            }
+          };
+          chrome.tabs.onUpdated.addListener(onUpdatedListener);
         });
         sendResponse({ status: "success", message: "Automation started" });
       } else if (message.action === "stopAutomation") {
@@ -205,4 +203,3 @@ async function openAndAutomateVideo(videoUrl: string): Promise<void> {
     });
   });
 }
-
