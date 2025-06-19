@@ -1,10 +1,11 @@
 console.log("[Content Script] ✅ Content script loaded");
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 let lastFetchedIndex = 0;
 
-function fetchNextVideoUrls(noOfUrls: number): string[] {
+async function fetchNextVideoUrls(noOfUrls: number): Promise<string[]> {
   console.log("Function Running");
-  const contents = document.getElementById("contents");
+  const contents = document.querySelector("#contents");
   if (!contents) {
     console.error("❌ #contents not found");
     return [];
@@ -27,32 +28,45 @@ function fetchNextVideoUrls(noOfUrls: number): string[] {
       urls.push(anchor.href);
     }
   }
-
-  console.log("✅ Fetched URLs:", urls);
   return urls;
 }
 
-// setTimeout(() => fetchNextVideoUrls(5), 4000);
-
-// SINGLE UNIFIED MESSAGE LISTENER
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log("Content script received message:", request);
-  // Handle video fetching request
-  if (request.action === "FETCH_UPLOADED_VIDEOS") {
-    console.log("Processing video fetch request...");
-    setTimeout(() => {
-      const links = fetchNextVideoUrls(request.count);
-      sendResponse({ videoLinks: links });
-    }, 4000);
-    return true;
+  // Handle quick synchronous ping (no need for return true)
+  if (request.action === "ping") {
+    sendResponse({ status: "ready" });
+    return; // No async logic here
   }
+
+  // Wrap all other logic in async block
+  (async () => {
+    try {
+      if (request.action === "FETCH_UPLOADED_VIDEOS") {
+        console.log("[Content] 📥 Received FETCH_UPLOADED_VIDEOS");
+        console.log("▶️ No of videos requested:", request.count);
+        await wait(3000);
+        const links = await fetchNextVideoUrls(request.count);
+        console.log("✅ Video links fetched:", links);
+
+        sendResponse({ videoLinks: links });
+      } else if (request.action === "startVideoAutomation") {
+        console.log("[Content] 🤖 Starting automation");
+
+        await automateThisVideo();
+
+        console.log("[Content] ✅ Automation complete");
+        sendResponse({ status: "done" });
+      }
+    } catch (err: any) {
+      console.error("[Content] ❌ Automation error:", err);
+      sendResponse({ status: "error", error: err.message });
+    }
+  })();
+
+  return true; // Keep port open for async responses
 });
-// --- Utility: Wait Helper ---
-// const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // --- Main Automation Logic ---
-// The automateThisVideo function is now disabled/commented out as per user request.
-/*
 async function automateThisVideo() {
   // CSS selectors for YouTube UI elements
   const selectors = {
@@ -103,7 +117,7 @@ async function automateThisVideo() {
         method: "POST",
         headers: {
           Authorization:
-            "Bearer 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",
+            "Bearer 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",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -143,7 +157,6 @@ async function automateThisVideo() {
     console.error("[Content] Comment fetch failed:", e);
   }
 }
-*/
 
 // --- Inject Stop Automation Button on Channel Videos Page ---
 if (/youtube\.com\/@[^/]+\/videos/.test(window.location.href)) {

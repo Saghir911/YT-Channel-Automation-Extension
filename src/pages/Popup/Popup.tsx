@@ -87,7 +87,7 @@ export default function Component() {
     setSearchState("loading");
     setSelectedChannelId(null);
     chrome.runtime.sendMessage(
-      { type: "FETCH_CHANNELS", query: searchQuery, maxResults: 5 },
+      { action: "FETCH_CHANNELS", query: searchQuery, maxResults: 5 },
       (response) => {
         if (chrome.runtime.lastError || !response) {
           setChannelResults([]);
