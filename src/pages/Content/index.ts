@@ -1,35 +1,71 @@
 console.log("[Content Script] ✅ Content script loaded");
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-let lastFetchedIndex = 0;
+// let lastFetchedIndex = 0;
 
-async function fetchNextVideoUrls(noOfUrls: number): Promise<string[]> {
-  console.log("Function Running");
-  const contents = document.querySelector("#contents");
-  if (!contents) {
-    console.error("❌ #contents not found");
-    return [];
+/**
+ * Scrolls the page by one viewport and waits until at least `minExpectedItems`
+ * ytd-rich-item-renderer elements exist, or times out after `timeoutMs`.
+ */
+async function scrollAndWaitForNewItems(
+  minExpectedItems: number,
+  timeoutMs = 8000
+): Promise<boolean> {
+  const start = Date.now();
+  const wait = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+  while (Date.now() - start < timeoutMs) {
+    window.scrollBy(0, window.innerHeight);
+    await wait(500);
+
+    const currentCount = document.querySelectorAll("ytd-rich-item-renderer").length;
+    if (currentCount >= minExpectedItems) {
+      return true;
+    }
   }
 
-  const items = Array.from(
-    contents.querySelectorAll("ytd-rich-item-renderer")
-  ) as HTMLElement[];
+  return false;
+}
 
+/**
+ * Fetches exactly `noOfUrls` video URLs from the channel’s /videos page,
+ * scrolling as needed to load more elements.
+ */
+async function fetchNextVideoUrls(noOfUrls: number): Promise<string[]> {
   const urls: string[] = [];
+  let lastFetchedIndex = 0;
 
-  while (lastFetchedIndex < items.length && urls.length < noOfUrls) {
-    const item = items[lastFetchedIndex];
-    lastFetchedIndex++;
+  while (urls.length < noOfUrls) {
+    // grab all currently rendered video items
+    const items = Array.from(
+      document.querySelectorAll("ytd-rich-item-renderer")
+    ) as HTMLElement[];
 
-    const anchor = item.querySelector(
-      "ytd-thumbnail a#thumbnail"
-    ) as HTMLAnchorElement | null;
+    // if we've consumed every loaded item, scroll to load more
+    if (lastFetchedIndex >= items.length) {
+      // target at least one more batch of items
+      const targetCount = items.length + Math.ceil(noOfUrls / 2);
+      const loaded = await scrollAndWaitForNewItems(targetCount);
+      if (!loaded) {
+        console.warn(
+          "[fetchNextVideoUrls] timed out waiting for more videos after scrolling."
+        );
+        break;
+      }
+      continue;
+    }
+
+    // otherwise pull the next URL
+    const item = items[lastFetchedIndex++];
+    const anchor = item.querySelector("a#thumbnail") as HTMLAnchorElement | null;
     if (anchor?.href) {
       urls.push(anchor.href);
     }
   }
+
   return urls;
 }
+
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   // Handle quick synchronous ping (no need for return true)

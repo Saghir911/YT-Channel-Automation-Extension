@@ -595,11 +595,26 @@
   border: none;
   background: var(--color-primary-light);
   color: var(--color-primary);
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
+  margin: 0px -5px 0px -5px;
   transition: background 0.2s, color 0.2s;
+}
+
+.video-count-btn:disabled {
+  background: var(--color-border);
+  color: var(--color-muted-fg-light);
+  cursor: not-allowed;
+}
+.plus-ten:hover {
+  color: white;
+  background-color: greenyellow;
+}
+.minus-ten:hover {
+  color: white;
+  background-color: var(--color-red-500);
 }
 
 .video-count-btn:disabled {
@@ -618,4 +633,5 @@
   border-radius: 4px;
   border: 1px solid var(--color-border);
   padding: 6px 14px;
+  margin: 0px 7px 0px 7px;
 }

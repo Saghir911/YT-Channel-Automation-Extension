@@ -33,7 +33,7 @@ export default function Component() {
   >([]);
   const [videoCount, setVideoCount] = useState(1);
   const minVideos = 1,
-    maxVideos = 10;
+    maxVideos = 100;
   const channelListRef = useRef<HTMLDivElement>(null);
 
   // --- Animate channel list when a channel is selected ---
@@ -191,6 +191,17 @@ export default function Component() {
                         <div className="video-count-controls">
                           <button
                             type="button"
+                            className="video-count-btn minus-ten"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setVideoCount((v) => Math.max(minVideos, v - 10));
+                            }}
+                            disabled={videoCount <= minVideos}
+                          >
+                            -10
+                          </button>
+                          <button
+                            type="button"
                             className="video-count-btn"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -216,6 +227,17 @@ export default function Component() {
                             disabled={videoCount >= maxVideos}
                           >
                             +
+                          </button>
+                          <button
+                            type="button"
+                            className="video-count-btn plus-ten"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setVideoCount((v) => Math.min(maxVideos, v + 10));
+                            }}
+                            disabled={videoCount >= maxVideos}
+                          >
+                            +10
                           </button>
                         </div>
                       </div>
