@@ -14,35 +14,31 @@ import "./Popup.css";
 type SearchState = "idle" | "loading" | "success" | "error" | "no-results";
 
 export default function Component() {
-  // --- State management for search and selection ---
+  // --- 1. State ---
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedChannelId, setSelectedChannelId] = useState<string | null>(
-    null
-  );
   const [searchState, setSearchState] = useState<SearchState>("idle");
-  const [showResultCount, setShowResultCount] = useState(false);
   const [channelResults, setChannelResults] = useState<
-    Array<{
-      id: string;
-      name: string;
-      subscribers: string;
-      avatar: string;
-      verified?: boolean;
-      handle?: string;
-    }>
+    Array<{ id: string; name: string; subscribers: string; avatar: string; handle?: string }>
   >([]);
+  const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null);
+  const [showResultCount, setShowResultCount] = useState(false);
   const [videoCount, setVideoCount] = useState(1);
-  const minVideos = 1,
-    maxVideos = 100;
+
+  // Constants
+  const minVideos = 1;
+  const maxVideos = 100;
   const channelListRef = useRef<HTMLDivElement>(null);
 
-  // --- Animate channel list when a channel is selected ---
+  // --- 2. Animation ---
   useEffect(() => {
     if (!channelListRef.current) return;
     const items = channelListRef.current.querySelectorAll(".channel-item");
+
     if (showResultCount && channelResults.length > 1) {
       gsap.to(
-        channelListRef.current.querySelectorAll(".channel-item:not(.selected)"),
+        channelListRef.current.querySelectorAll(
+          ".channel-item:not(.selected)"
+        ),
         { opacity: 0, scale: 0.95, duration: 0, pointerEvents: "none" }
       );
     } else {
@@ -50,28 +46,18 @@ export default function Component() {
     }
   }, [showResultCount, selectedChannelId, channelResults.length]);
 
-  // --- Reset video count input if no channel is selected ---
+  // --- 3. Reset on Deselect ---
   useEffect(() => {
     if (selectedChannelId === null) {
       setShowResultCount(false);
-      setVideoCount(1);
+      setVideoCount(minVideos);
     }
   }, [selectedChannelId]);
 
-  // --- Get selected channel data ---
   const selectedChannel =
     channelResults.find((c) => c.id === selectedChannelId) || null;
 
-  // --- Start automation for selected channel ---
-  const startAutomation = () => {
-    chrome.runtime.sendMessage({
-      action: "START_AUTOMATION",
-      selectedHandle: selectedChannel,
-      maxResults: 5,
-      count: videoCount,
-    });
-  };
-  // --- Format subscriber count for display ---
+  // --- 4. Format Subs ---
   const formatSubscribers = (subs: string | number) => {
     const num = typeof subs === "number" ? subs : Number(subs);
     if (isNaN(num)) return String(subs);
@@ -81,11 +67,12 @@ export default function Component() {
     return num.toString();
   };
 
-  // --- Search for channels using the query ---
+  // --- 5. Search ---
   const handleSearch = () => {
     if (!searchQuery.trim()) return;
     setSearchState("loading");
     setSelectedChannelId(null);
+
     chrome.runtime.sendMessage(
       { action: "FETCH_CHANNELS", query: searchQuery, maxResults: 5 },
       (response) => {
@@ -94,7 +81,7 @@ export default function Component() {
           setSearchState("error");
           return;
         }
-        if (response.channels && response.channels.length > 0) {
+        if (response.channels?.length) {
           setChannelResults(
             response.channels.map((ch: any) => ({
               id: ch.id,
@@ -114,58 +101,62 @@ export default function Component() {
     );
   };
 
-  // --- Handle Enter key for search ---
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") handleSearch();
   };
 
-  // --- Render the main content area based on search state ---
+  // --- 6. Start ---
+  const startAutomation = () => {
+    chrome.runtime.sendMessage({
+      action: "START_AUTOMATION",
+      selectedHandle: selectedChannel,
+      maxResults: 5,
+      count: videoCount,
+    });
+  };
+
+  // --- 7. Render Content ---
   const renderContent = () => {
     switch (searchState) {
       case "idle":
         return (
           <div className="idle-state">
-            <div>
-              <div className="idle-state-icon">
-                <Search />
-              </div>
-              <h3>Search for a channel</h3>
-              <p>
-                Enter a channel name or handle to find YouTube channels for
-                automation.
-              </p>
+            <div className="idle-state-icon">
+              <Search />
             </div>
+            <h3>Search for a channel</h3>
+            <p>
+              Enter a channel name or handle to find YouTube channels for
+              automation.
+            </p>
           </div>
         );
+
       case "loading":
         return (
           <div className="loading-state">
-            <div>
-              <div className="loading-state-icon">
-                <Loader2 />
-              </div>
-              <h3>Searching...</h3>
-              <p>Looking for &quot;{searchQuery}&quot;</p>
+            <div className="loading-state-icon">
+              <Loader2 />
             </div>
+            <h3>Searching...</h3>
+            <p>Looking for &quot;{searchQuery}&quot;</p>
           </div>
         );
+
       case "no-results":
         return (
           <div className="no-results-state">
-            <div>
-              <div className="no-results-icon">
-                <Youtube />
-              </div>
-              <h3>No channels found</h3>
-              <p>
-                We couldn’t find any channels matching &quot;{searchQuery}&quot;
-              </p>
-              <Button variant="outline" onClick={() => setSearchState("idle")}>
-                Try another search
-              </Button>
+            <div className="no-results-icon">
+              <Youtube />
             </div>
+            <h3>No channels found</h3>
+            <p>
+              We couldn’t find any channels matching &quot;{searchQuery}&quot;
+            </p>
+            <Button variant="outline" onClick={() => setSearchState("idle")}>Try another search</Button>
           </div>
         );
+
       case "success":
         return (
           <ScrollArea className="results-scroll">
@@ -179,13 +170,9 @@ export default function Component() {
                 const isSelected = selectedChannelId === channel.id;
                 return (
                   <React.Fragment key={channel.id}>
-                    {/* Show video count input below the selected channel */}
                     {showResultCount && isSelected && (
                       <div className="video-count-input-wrapper center">
-                        <label
-                          htmlFor="noOfVideoToAutomate"
-                          className="video-count-label"
-                        >
+                        <label htmlFor="noOfVideoToAutomate" className="video-count-label">
                           Enter number of videos to automate:
                         </label>
                         <div className="video-count-controls">
@@ -211,10 +198,7 @@ export default function Component() {
                           >
                             -
                           </button>
-                          <div
-                            className="video-count-display"
-                            id="noOfVideoToAutomate"
-                          >
+                          <div className="video-count-display" id="noOfVideoToAutomate">
                             {videoCount}
                           </div>
                           <button
@@ -263,16 +247,8 @@ export default function Component() {
                         <div className="channel-name">{channel.name}</div>
                         {channel.subscribers}
                       </div>
-                      <div
-                        className={`channel-select-indicator ${
-                          isSelected ? "selected" : "default hovered"
-                        }`}
-                      >
-                        {isSelected ? (
-                          <Check />
-                        ) : (
-                          <div className="check-placeholder" />
-                        )}
+                      <div className={`channel-select-indicator ${isSelected ? "selected" : "default hovered"}`}>
+                        {isSelected ? <Check /> : <div className="check-placeholder" />} 
                       </div>
                     </div>
                   </React.Fragment>
@@ -281,12 +257,12 @@ export default function Component() {
             </div>
           </ScrollArea>
         );
+
       default:
         return null;
     }
   };
 
-  // --- Render the popup UI ---
   return (
     <div className="youtube-automation">
       <div className="you-header">
@@ -306,35 +282,19 @@ export default function Component() {
             onKeyDown={handleKeyPress}
             disabled={searchState === "loading"}
           />
-          <Button
-            onClick={handleSearch}
-            disabled={!searchQuery.trim() || searchState === "loading"}
-          >
-            {searchState === "loading" ? (
-              <Loader2 className="animate-spin" />
-            ) : (
-              "Search"
-            )}
+          <Button onClick={handleSearch} disabled={!searchQuery.trim() || searchState === "loading"}>
+            {searchState === "loading" ? <Loader2 className="animate-spin" /> : "Search"}
           </Button>
         </div>
       </div>
       <Separator />
       <div className="content-area">{renderContent()}</div>
-      {/* Show footer only if a channel is selected */}
       {selectedChannel && (
         <>
           <Separator />
-          <div className="footer">
-            <Button
-              className="footer-btn"
-              onClick={() => {
-                startAutomation();
-              }}
-            >
-              <Sparkles />
-              Start Automation
-            </Button>
-          </div>
+          <div className="footer"> <Button className="footer-btn" onClick={startAutomation}>
+            <Sparkles /> Start Automation
+          </Button></div>
         </>
       )}
     </div>
