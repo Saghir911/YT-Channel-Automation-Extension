@@ -167,7 +167,7 @@ async function automateThisVideo(): Promise<void> {
     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: "Bearer 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",
+        Authorization: "Bearer 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",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({

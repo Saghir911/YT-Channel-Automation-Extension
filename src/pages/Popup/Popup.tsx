@@ -18,9 +18,17 @@ export default function Component() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchState, setSearchState] = useState<SearchState>("idle");
   const [channelResults, setChannelResults] = useState<
-    Array<{ id: string; name: string; subscribers: string; avatar: string; handle?: string }>
+    Array<{
+      id: string;
+      name: string;
+      subscribers: string;
+      avatar: string;
+      handle?: string;
+    }>
   >([]);
-  const [selectedChannelId, setSelectedChannelId] = useState<string | null>(null);
+  const [selectedChannelId, setSelectedChannelId] = useState<string | null>(
+    null
+  );
   const [showResultCount, setShowResultCount] = useState(false);
   const [videoCount, setVideoCount] = useState(1);
 
@@ -36,9 +44,7 @@ export default function Component() {
 
     if (showResultCount && channelResults.length > 1) {
       gsap.to(
-        channelListRef.current.querySelectorAll(
-          ".channel-item:not(.selected)"
-        ),
+        channelListRef.current.querySelectorAll(".channel-item:not(.selected)"),
         { opacity: 0, scale: 0.95, duration: 0, pointerEvents: "none" }
       );
     } else {
@@ -153,7 +159,9 @@ export default function Component() {
             <p>
               We couldn’t find any channels matching &quot;{searchQuery}&quot;
             </p>
-            <Button variant="outline" onClick={() => setSearchState("idle")}>Try another search</Button>
+            <Button variant="outline" onClick={() => setSearchState("idle")}>
+              Try another search
+            </Button>
           </div>
         );
 
@@ -172,7 +180,10 @@ export default function Component() {
                   <React.Fragment key={channel.id}>
                     {showResultCount && isSelected && (
                       <div className="video-count-input-wrapper center">
-                        <label htmlFor="noOfVideoToAutomate" className="video-count-label">
+                        <label
+                          htmlFor="noOfVideoToAutomate"
+                          className="video-count-label"
+                        >
                           Enter number of videos to automate:
                         </label>
                         <div className="video-count-controls">
@@ -198,7 +209,10 @@ export default function Component() {
                           >
                             -
                           </button>
-                          <div className="video-count-display" id="noOfVideoToAutomate">
+                          <div
+                            className="video-count-display"
+                            id="noOfVideoToAutomate"
+                          >
                             {videoCount}
                           </div>
                           <button
@@ -247,8 +261,16 @@ export default function Component() {
                         <div className="channel-name">{channel.name}</div>
                         {channel.subscribers}
                       </div>
-                      <div className={`channel-select-indicator ${isSelected ? "selected" : "default hovered"}`}>
-                        {isSelected ? <Check /> : <div className="check-placeholder" />} 
+                      <div
+                        className={`channel-select-indicator ${
+                          isSelected ? "selected" : "default hovered"
+                        }`}
+                      >
+                        {isSelected ? (
+                          <Check />
+                        ) : (
+                          <div className="check-placeholder" />
+                        )}
                       </div>
                     </div>
                   </React.Fragment>
@@ -282,8 +304,15 @@ export default function Component() {
             onKeyDown={handleKeyPress}
             disabled={searchState === "loading"}
           />
-          <Button onClick={handleSearch} disabled={!searchQuery.trim() || searchState === "loading"}>
-            {searchState === "loading" ? <Loader2 className="animate-spin" /> : "Search"}
+          <Button
+            onClick={handleSearch}
+            disabled={!searchQuery.trim() || searchState === "loading"}
+          >
+            {searchState === "loading" ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              "Search"
+            )}
           </Button>
         </div>
       </div>
@@ -292,9 +321,12 @@ export default function Component() {
       {selectedChannel && (
         <>
           <Separator />
-          <div className="footer"> <Button className="footer-btn" onClick={startAutomation}>
-            <Sparkles /> Start Automation
-          </Button></div>
+          <div className="footer">
+            {" "}
+            <Button className="footer-btn" onClick={startAutomation}>
+              <Sparkles /> Start Automation
+            </Button>
+          </div>
         </>
       )}
     </div>
