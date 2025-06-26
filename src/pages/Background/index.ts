@@ -195,7 +195,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
                       setTimeout(() => {
                         chrome.tabs.remove(channelPageTabId!);
                         channelPageTabId = null;
-                      }, 2000);
+                      }, 1000);
                     }
                   }
                 );

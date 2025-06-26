@@ -131,7 +131,7 @@ async function automateThisVideo(): Promise<void> {
   const selectors = {
     subscribeBtn: "ytd-subscribe-button-renderer button",
     subscribeSpan: "ytd-subscribe-button-renderer button span",
-    likeBtn: "button-view-model button",
+    likeBtn: "like-button-view-model button",
     commentArea: "#placeholder-area",
     inputField: "#contenteditable-root",
     commentBtn: "yt-button-shape button"
@@ -156,7 +156,7 @@ async function automateThisVideo(): Promise<void> {
   }
 
   // Scroll down to comments
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 2; i++) {
     window.scrollBy(0, 200);
     await wait(500);
   }
