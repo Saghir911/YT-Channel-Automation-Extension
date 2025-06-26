@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Extension Boilerplate with react",
+  "name": "YT Channel Automation",
   "description": "This extension to ",
   "background": {
     "service_worker": "background.bundle.js"
