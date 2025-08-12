@@ -325,10 +325,7 @@ export default function Component() {
           <div className="footer">
             <Button
               className="footer-btn"
-              onClick={() => {
-                startAutomation();
-                fetchUploadedVideos();
-              }}
+              onClick={startAutomation}
             >
               <Sparkles />
               Start Automation
