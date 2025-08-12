@@ -1,6 +1,8 @@
-/* ==========================
-   Variables (colors, spacing)
-   ========================== */
+/* Popup.css
+   YouTube Automation Popup Stylesheet
+   — preserves all class names exactly as in your markup */
+
+/* 1. CSS Variables (colors, spacing, typography) */
 :root {
   --color-background: #ffffff;
   --color-border: #e5e7eb;
@@ -10,42 +12,41 @@
   --color-muted-fg-light: #9ca3af;
   --color-primary: #3b82f6;
   --color-primary-light: #dbeafe;
-  --color-blue-500: #3b82f6;
   --color-red-500: #ef4444;
   --color-text-default: #111827;
   --color-text-heading: #1f2937;
   --color-separator: #e5e7eb;
-  --radius-md: 8px;
+
   --radius-sm: 4px;
+  --radius-md: 8px;
+
   --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+
   --font-base: 14px;
   --font-sm: 12px;
   --font-md: 16px;
+
   --spacing-1: 4px;
   --spacing-2: 8px;
   --spacing-3: 12px;
   --spacing-4: 16px;
+  --spacing-6: 24px;
 }
 
-/* ==========================
-   Global Resets (optional)
-   ========================== */
+/* 2. Global Reset */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
   font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, sans-serif;
 }
 
-/* ==========================
-   Main Container (YouTube Automation)
-   ========================== */
+/* 3. Main Container */
 .youtube-automation {
-  width: 320px; /* ~ w-80 */
+  width: 320px;
   height: 480px;
-  background-color: var(--color-background);
+  background: var(--color-background);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
@@ -55,288 +56,200 @@
   overflow: hidden;
 }
 
-/* ===== Header ===== */
+/* 4. Header */
 .you-header {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
   padding: var(--spacing-4) var(--spacing-4) var(--spacing-3);
 }
-
 .you-header-icon {
-  width: 32px; /* ~ w-8 */
+  width: 32px;
   height: 32px;
-  background-color: var(--color-red-500);
+  background: var(--color-red-500);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
 .you-header-icon svg {
-  width: 20px; /* ~ w-5 */
+  width: 20px;
   height: 20px;
-  color: #ffffff;
+  color: #fff;
 }
-
 .you-header-title {
-  font-weight: 600; /* font-semibold */
   font-size: var(--font-md);
+  font-weight: 600;
   color: var(--color-text-heading);
 }
 
-/* ===== Separator ===== */
+/* Separator */
 .separator {
   height: 1px;
-  background-color: var(--color-separator);
+  background: var(--color-separator);
   width: 100%;
 }
 
-/* ===== Search Section ===== */
+/* 5. Search Section */
 .search-section {
   padding: var(--spacing-4) var(--spacing-4) var(--spacing-3);
 }
-
 .search-row {
   display: flex;
   gap: var(--spacing-2);
 }
 
+/* Input wrapper + icon */
 .input-wrapper {
   position: relative;
   flex: 1;
 }
-
 .input-icon {
   position: absolute;
   left: var(--spacing-1);
-  margin-left: 3px;
-  top: 40%;
-  transform: translateY(-40%);
-
+  top: 50%;
+  transform: translateY(-50%);
   width: 16px;
   height: 16px;
   color: var(--color-muted-fg-light);
+  margin-top: -3px;
 }
-
 .search-input {
   width: 100%;
-  padding-left: calc(
-    var(--spacing-3) + 16px + var(--spacing-1)
-  ); /* icon + some padding */
-  height: 40px; /* ~ h-10 */
+  height: 40px;
+  padding-left: calc(var(--spacing-3) + 16px + var(--spacing-1));
   font-size: var(--font-base);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   color: var(--color-text-default);
 }
-
 .search-input:disabled {
-  background-color: var(--color-muted-bg);
+  background: var(--color-muted-bg);
   cursor: not-allowed;
 }
 
-/* ===== Button ===== */
-/* Default (filled) */
+/* 6. Buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 40px; /* ~ h-10 */
+  height: 40px;
   padding: 0 var(--spacing-4);
   font-size: var(--font-base);
   font-weight: 500;
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  background-color: var(--color-primary);
-  color: #ffffff;
   transition: background 0.2s;
 }
-
-.btn:disabled {
-  background-color: var(--color-border);
-  color: var(--color-muted-fg-light);
-  cursor: not-allowed;
-}
-
-/* Outline variant */
-.btn-outline {
-  background-color: transparent;
-  border: 1px solid var(--color-border);
-  color: var(--color-text-default);
-}
-
-.btn-outline:hover:not(:disabled) {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
-}
-
-/* Icon inside button */
 .btn svg {
   margin-right: var(--spacing-2);
   width: 16px;
   height: 16px;
 }
+.btn {
+  background: var(--color-primary);
+  color: #fff;
+}
+.btn:disabled {
+  background: var(--color-border);
+  color: var(--color-muted-fg-light);
+  cursor: not-allowed;
+}
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-default);
+}
+.btn-outline:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
 
-/* ===== Content Area ===== */
+/* 7. Content Area States */
 .content-area {
-  flex: 1 1 auto;
+  flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 0;
 }
 
-/* ---- Idle State ---- */
-.idle-state {
+/* Idle / Loading / No-Results share layout */
+.idle-state,
+.loading-state,
+.no-results-state {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-6);
   text-align: center;
 }
-
-.idle-state-icon {
-  width: 64px; /* ~ w-16 */
-  height: 64px;
-  background-color: var(--color-muted-bg);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto var(--spacing-4);
-}
-
-.idle-state-icon svg {
-  width: 32px; /* ~ w-8 */
-  height: 32px;
-  color: var(--color-muted-fg-light);
-}
-
-.idle-state h3 {
-  font-weight: 500; /* font-medium */
-  font-size: var(--font-base);
-  margin-bottom: var(--spacing-2);
-  color: var(--color-text-heading);
-}
-
-.idle-state p {
-  font-size: var(--font-sm);
-  color: var(--color-muted-fg);
-  width: 90%;
-  margin: 0 auto;
-}
-
-/* ---- Loading State ---- */
-.loading-state {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-6);
-  text-align: center;
-}
-
-.loading-state-icon {
+.idle-state-icon,
+.loading-state-icon,
+.no-results-icon {
   width: 64px;
   height: 64px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto var(--spacing-4);
+  margin-bottom: var(--spacing-4);
 }
-
+.idle-state-icon svg,
+.no-results-icon svg {
+  width: 32px;
+  height: 32px;
+  color: var(--color-muted-fg-light);
+}
 .loading-state-icon svg {
   width: 32px;
   height: 32px;
   color: var(--color-primary);
   animation: spin 1s linear infinite;
 }
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
-
-.loading-state h3 {
-  font-weight: 500;
+h3 {
+  margin-bottom: var(--spacing-2);
   font-size: var(--font-base);
-  margin-bottom: var(--spacing-1);
+  font-weight: 500;
   color: var(--color-text-heading);
 }
-
+p {
+  font-size: var(--font-sm);
+  color: var(--color-muted-fg);
+}
 .loading-state p {
-  font-size: var(--font-sm);
-  color: var(--color-muted-fg);
+  margin-top: var(--spacing-1);
 }
-
-/* ---- No Results State ---- */
-.no-results-state {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-6);
-  text-align: center;
-}
-
-.no-results-icon {
-  width: 64px;
-  height: 64px;
-  background-color: var(--color-muted-bg);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto var(--spacing-4);
-}
-
-.no-results-icon svg {
-  width: 32px;
-  height: 32px;
-  color: var(--color-muted-fg-light);
-}
-
-.no-results-state h3 {
-  font-weight: 500;
-  font-size: var(--font-base);
-  margin-bottom: var(--spacing-1);
-  color: var(--color-text-heading);
-}
-
 .no-results-state p {
-  font-size: var(--font-sm);
-  color: var(--color-muted-fg);
   margin-bottom: var(--spacing-4);
 }
 
-/* ---- Results List (Success) ---- */
+/* 8. Results List */
 .results-scroll {
   flex: 1;
   overflow-y: auto;
   padding: 0 var(--spacing-4);
 }
-
 .results-info {
   padding: var(--spacing-2) 0;
   font-size: var(--font-sm);
   color: var(--color-muted-fg);
 }
-
 .channel-list {
+  position: relative;
   display: flex;
   flex-direction: column;
-  position: relative;
   gap: var(--spacing-3);
   padding-bottom: var(--spacing-4);
-  height: 100vh;
 }
-
 .channel-item {
-  position: relative;
   display: flex;
   align-items: center;
   gap: var(--spacing-3);
@@ -346,140 +259,144 @@
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
 }
-
 .channel-item:hover {
-  background-color: var(--color-muted-bg);
+  background: var(--color-muted-bg);
   border-color: var(--color-border-hover);
 }
-
 .channel-item.selected {
-  background-color: var(--color-primary-light);
+  background: var(--color-primary-light);
   border-color: rgba(59, 130, 246, 0.3);
-  top: 0;
   position: absolute;
+  top: 0;
   width: 100%;
 }
-
-.channel-item.fade-out {
-  opacity: 0;
-  transform: scale(0.95);
-  pointer-events: none;
-  display: none;
-  z-index: -100;
-  position: absolute;
-  cursor: not-allowed;
-}
-
 .channel-avatar-wrapper {
-  position: relative;
-  width: 40px;
-  height: 40px;
   flex-shrink: 0;
 }
-
 .channel-avatar {
-  width: 100%;
-  height: 100%;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
 }
-/* Channel text */
 .channel-info {
   flex: 1;
   min-width: 0;
 }
-
 .channel-name {
-  font-weight: 500;
   font-size: var(--font-sm);
+  font-weight: 500;
   color: var(--color-text-heading);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-/* Check icon circle on the right */
+.channel-subs {
+  font-size: var(--font-sm);
+  color: var(--color-muted-fg);
+}
 .channel-select-indicator {
-  width: 24px; /* ~ w-6/h-6 */
+  width: 24px;
   height: 24px;
   border-radius: 50%;
+  border: 2px solid rgba(107, 114, 128, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: border-color 0.2s;
 }
-
-.channel-select-indicator.default {
-  border: 2px solid rgba(107, 114, 128, 0.3); /* muted-foreground/30 */
-}
-
-.channel-select-indicator.hovered:hover {
+.channel-item:hover .channel-select-indicator {
   border-color: var(--color-primary);
 }
-
 .channel-select-indicator.selected {
-  background-color: var(--color-primary);
+  background: var(--color-primary);
+  border-color: transparent;
 }
-
 .channel-select-indicator.selected svg {
-  width: 16px; /* ~ w-4 */
+  width: 16px;
   height: 16px;
-  color: #ffffff;
+  color: #fff;
   stroke-width: 3;
 }
 
-/* ===== Footer (Start Automation) ===== */
+/* 9. Video Count Overlay */
+.video-count-input-wrapper.center {
+  position: absolute;
+  top: 66px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-1);
+  background: var(--color-muted-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-2) var(--spacing-4);
+  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.07);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.video-count-input-wrapper.center:hover,
+.video-count-input-wrapper.center:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+.video-count-label {
+  font-size: var(--font-sm);
+  font-weight: 500;
+  color: var(--color-text-heading);
+  margin-bottom: var(--spacing-1);
+}
+.video-count-controls {
+  display: flex;
+  gap: var(--spacing-3);
+  align-items: center;
+}
+.video-count-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 6px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.video-count-btn:disabled {
+  background: var(--color-border);
+  color: var(--color-muted-fg-light);
+  cursor: not-allowed;
+}
+.video-count-btn.plus-ten:hover {
+  background: greenyellow;
+  color: #fff;
+}
+.video-count-btn.minus-ten:hover {
+  background: var(--color-red-500);
+  color: #fff;
+}
+.video-count-display {
+  min-width: 36px;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-text-heading);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-1) 14px;
+}
+
+/* 10. Footer */
 .footer {
   padding: var(--spacing-4) var(--spacing-4) var(--spacing-3);
 }
-
 .footer-btn {
   width: 100%;
 }
 
-/* ==========================
-   ScrollArea (re-usable)
-   ========================== */
-.scroll-area {
-  max-height: 100%; /* or any value that fits your popup design */
-  overflow-y: auto;
-  flex: unset;
-}
-
-/* ==========================
-   Separator Component
-   ========================== */
-.separator-full {
-  width: 100%;
-  height: 1px;
-  background-color: var(--color-separator);
-}
-
-/* ==========================
-   Input Component
-   ========================== */
-.input-base {
-  width: 100%;
-  padding: 0 var(--spacing-3);
-  height: 40px;
-  font-size: var(--font-base);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  color: var(--color-text-default);
-}
-
-.input-base:disabled {
-  background-color: var(--color-muted-bg);
-  cursor: not-allowed;
-}
-
-/* ==========================
-   Button Component (re-used above)
-   ========================== */
-/* .btn, .btn-outline already defined */
-
-/* ==========================
-   Utility Classes
-   ========================== */
+/* 11. Utilities */
 .text-center {
   text-align: center;
 }
@@ -506,116 +423,4 @@
 }
 .p-6 {
   padding: var(--spacing-6);
-}
-
-/* ==========================
-   Video Count Input Component
-   ========================== */
-/* Container for the video count input */
-.video-count-input-wrapper {
-  position: absolute;
-  display: flex;
-  top: 66px;
-  align-items: center;
-  gap: 8px;
-  margin: 12px 0px 8px 0px; /* extra top margin to sit below the selected channel */
-  background: #f0f9ff; /* a light blue background to stand out */
-  border-radius: 8px; /* slightly larger rounding */
-  padding: 8px 16px; /* more padding for comfort */
-  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15); /* slightly stronger shadow */
-  border: 1px solid #3b82f6; /* a blue border to match primary color */
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-/* Hover/Focus state for the wrapper (optional subtle lift) */
-.video-count-input-wrapper:hover,
-.video-count-input-wrapper:focus-within {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-}
-
-.video-count-input-wrapper.center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-  margin-bottom: 12px;
-  margin-top: 8px;
-  background: var(--color-muted-bg);
-  border-radius: var(--radius-sm);
-  padding: 10px 16px;
-  box-shadow: 0 1px 4px rgba(59, 130, 246, 0.07);
-}
-
-/* Label styling */
-.video-count-label {
-  font-size: var(--font-sm);
-  color: var(--color-text-heading);
-  font-weight: 500;
-  margin-bottom: 2px;
-}
-
-/* Input field styling */
-.video-count-input {
-  width: 80px; /* a bit wider for clarity */
-  height: 36px; /* slightly taller */
-  font-size: 1rem; /* 16px for readability */
-  border: 1px solid #3b82f6; /* blue border to match wrapper */
-  border-radius: 6px; /* small rounding */
-  padding: 0 10px; /* horizontal padding */
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* Input focus state */
-.video-count-input:focus {
-  border-color: #2563eb; /* darker blue on focus */
-  box-shadow: 0 0 4px rgba(37, 99, 235, 0.3);
-}
-
-/* Placeholder color */
-.video-count-input::placeholder {
-  color: #9ca3af; /* muted placeholder color */
-}
-
-.video-count-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-}
-
-.video-count-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: none;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  font-size: 1.5rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.2s, color 0.2s;
-}
-
-.video-count-btn:disabled {
-  background: var(--color-border);
-  color: var(--color-muted-fg-light);
-  cursor: not-allowed;
-}
-
-.video-count-display {
-  min-width: 36px;
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--color-text-heading);
-  background: #fff;
-  border-radius: 4px;
-  border: 1px solid var(--color-border);
-  padding: 6px 14px;
 }
